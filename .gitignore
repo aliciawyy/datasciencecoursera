@@ -1,0 +1,10 @@
+*~
+.idea
+*.pyc
+data/season_1/training_data
+*.tar.gz
+*.DS_Store
+.coverage
+
+
+.ipynb_checkpoints
