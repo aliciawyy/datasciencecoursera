@@ -28,5 +28,4 @@ build:
         name: python unit test
         code: |
           export PYTHONPATH=$PWD/dmining:$PYTHONPATH
-          nosetests ./core/tests --with-coverage --cover-package=core \
-                    --cover-html --cover-erase -v
+          nosetests ./core/tests --with-coverage --cover-package=core --cover-html --cover-erase -v
