@@ -4,10 +4,12 @@ python:
   - "2.7"
 
 install:
+  - pip install -U pip
   - pip install -r requirements.txt
   - pip install coveralls
 
 script:
+  - export PYTHONPATH=$PWD/aliciawyy/dmining:$PYTHONPATH
   - nosetests ./core/tests --with-coverage --cover-package=core --cover-html --cover-erase -v
 
  # Coverage report
