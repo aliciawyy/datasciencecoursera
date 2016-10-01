@@ -2,11 +2,12 @@
 util functions
 """
 from __future__ import division
-import numpy as np
 import collections
+import numpy as np
 
 
 def group_probability(x):
+    """Compute the probability of each group given an array x"""
     count = collections.Counter(x)
     num_samples = len(x)
     return {k: v / num_samples for k, v in count.items()}
@@ -31,6 +32,14 @@ def entropy(x):
     return - np.sum(group_probabilities * np.log2(group_probabilities))
 
 
+def partition_entropy(partition, y):
+    num_samples = len(y)
+    subsets = collections.defaultdict(list)
+    for group, response in zip(partition, y):
+        subsets[group].append(response)
+    return np.sum(len(v) / num_samples * entropy(v) for v in subsets.values())
+
+
 def information_gain(x, y):
     """
     Information gain tells us how important a given feature is. It is used when we want to determine
@@ -46,12 +55,5 @@ def information_gain(x, y):
     H(y|x) can also be interpreted as the weighted average of children entropy
     """
     x = x[:, None] if x.ndim == 1 else x
-    num_samples = len(y)
-    num_features = x.shape[1]
-    res = np.zeros(num_features)
-    for j in range(num_features):
-        response_by_feature_j = collections.defaultdict(list)
-        for feature_j, target in zip(x[:, j], y):
-            response_by_feature_j[feature_j].append(target)
-        res[j] = np.sum(len(v) / num_samples * entropy(v) for v in response_by_feature_j.values())
-    return entropy(y) - res
+    res = [partition_entropy(x[:, j], y) for j in range(x.shape[1])]
+    return np.subtract(entropy(y), res)

@@ -1,0 +1,15 @@
+,lang,level,phd,tweets,hire
+0,Java,Senior,no,no,False
+1,Java,Senior,yes,no,False
+2,Python,Mid,no,no,True
+3,Python,Junior,no,no,True
+4,R,Junior,no,yes,True
+5,R,Junior,yes,yes,False
+6,R,Mid,yes,yes,True
+7,Python,Senior,no,no,False
+8,R,Senior,no,yes,True
+9,Python,Junior,no,yes,True
+10,Python,Senior,yes,yes,True
+11,Python,Mid,yes,no,True
+12,Java,Mid,no,yes,True
+13,Python,Junior,yes,no,False
