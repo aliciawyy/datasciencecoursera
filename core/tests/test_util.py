@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from numpy.testing import TestCase, assert_array_almost_equal
 
 from core import util
@@ -34,8 +35,9 @@ class UtilTest(TestCase):
 def test_information_gain1():
     x = np.array([[0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1],
                   [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]]).transpose()
+    df_x = pd.DataFrame(x)
     y = [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]
-    res = util.information_gain(x, y)
+    res = util.information_gain(df_x, y)
     assert_array_almost_equal(res, [0.654858,  0.979869])
 
 

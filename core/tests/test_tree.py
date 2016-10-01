@@ -12,9 +12,10 @@ class DecisionTreeTest(TestCase):
         self.ch_target = full_data[target_tag]
         self.ch_data = full_data.drop(target_tag, 1)
         self.id3_expected = ("level", {
-            "Junior": ('phd', {'no': True, 'yes': False}),
+            "Junior": ('phd', {None: True, 'no': True, 'yes': False}),
             "Mid": True,
-            "Senior": ('tweets', {'no': False, 'yes': True})
+            "Senior": ('tweets', {None: False, 'no': False, 'yes': True}),
+            None: True
         })
 
     def test_fit_id3(self):
@@ -27,6 +28,9 @@ class DecisionTreeTest(TestCase):
         self.assertTrue(predict({"level": "Mid", "lang": "R", "tweets": "no", "phd": "yes"}))
         self.assertFalse(predict({"level": "Senior", "lang": "R", "tweets": "no", "phd": "yes"}))
         self.assertTrue(predict({"level": "Senior", "lang": "R", "tweets": "yes", "phd": "yes"}))
+        self.assertTrue(predict({"level": "Intern", "lang": "java", "tweets": "yes", "phd": "yes"}))
+        self.assertTrue(predict({"lang": "java", "tweets": "yes", "phd": "yes"}))
+        self.assertFalse(predict({"level": "Senior", "lang": "R"}))
 
     def test_class_ID3(self):
         id3 = tree.ID3()
