@@ -12,6 +12,17 @@ class UtilTest(TestCase):
         x = [0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]
         self.assertEqual(util.entropy(x), 1.)
 
+    def test_group_probability(self):
+        x = [0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]
+        result = util.group_probability(x)
+        self.assertDictEqual(result, {0: .5, 1: .5})
+        self.assertDictEqual(util.group_probability(np.ones(10)), {1: 1})
+
+    def test_gini(self):
+        x = [0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]
+        self.assertAlmostEqual(util.gini(x), 0.5)
+        self.assertAlmostEqual(util.gini(np.zeros(10)), 0.)
+
 
 def test_information_gain1():
     x = np.array([[0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1],

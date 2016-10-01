@@ -6,6 +6,17 @@ import numpy as np
 import collections
 
 
+def group_probability(x):
+    count = collections.Counter(x)
+    num_samples = len(x)
+    return {k: v / num_samples for k, v in count.items()}
+
+
+def gini(x):
+    group_probabilities = group_probability(x).values()
+    return np.sum(group_probabilities * np.subtract(1, group_probabilities))
+
+
 def entropy(x):
     """
     Entropy is an attribute of a random variable that measures its disorder. The higher the entropy
@@ -16,8 +27,7 @@ def entropy(x):
 
     A good training set requires higher entropy.
     """
-    count = collections.Counter(x)
-    group_probabilities = np.divide(count.values(), float(len(x)))
+    group_probabilities = group_probability(x).values()
     return - np.sum(group_probabilities * np.log2(group_probabilities))
 
 
