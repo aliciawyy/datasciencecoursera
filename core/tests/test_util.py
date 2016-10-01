@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import pandas as pd
 from numpy.testing import TestCase, assert_array_almost_equal
@@ -23,6 +24,10 @@ class UtilTest(TestCase):
         x = [0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]
         self.assertAlmostEqual(util.gini(x), 0.5)
         self.assertAlmostEqual(util.gini(np.zeros(10)), 0.)
+        x = [0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0]
+        expected = np.sum(x) / len(x)
+        expected = 2 * (1. - expected) * expected
+        self.assertAlmostEqual(util.gini(x), expected)
 
     def test_almost_zero(self):
         self.assertFalse(util.almost_zero(1e-5))

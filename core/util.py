@@ -6,6 +6,13 @@ import collections
 import numpy as np
 import pandas as pd
 
+DISORDER_METRICS = {}
+
+
+def disorder_metric(func):
+    DISORDER_METRICS.update({func.__name__: func})
+    return func
+
 
 def group_probability(x):
     """Compute the probability of each group given an array x"""
@@ -14,11 +21,13 @@ def group_probability(x):
     return {k: v / num_samples for k, v in count.items()}
 
 
+@disorder_metric
 def gini(x):
     group_probabilities = group_probability(x).values()
     return np.sum(group_probabilities * np.subtract(1, group_probabilities))
 
 
+@disorder_metric
 def entropy(x):
     """
     Entropy is an attribute of a random variable that measures its disorder. The higher the entropy
@@ -33,12 +42,13 @@ def entropy(x):
     return - np.sum(group_probabilities * np.log2(group_probabilities))
 
 
-def partition_entropy(partition, y):
+def partition_by(partition, y, criterion="entropy"):
     num_samples = len(y)
     subsets = collections.defaultdict(list)
+    disorder_metric_func = DISORDER_METRICS[criterion]
     for group, response in zip(partition, y):
         subsets[group].append(response)
-    return np.sum(len(v) / num_samples * entropy(v) for v in subsets.values())
+    return np.sum(len(v) / num_samples * disorder_metric_func(v) for v in subsets.values())
 
 
 def information_gain(x, y):
@@ -57,9 +67,9 @@ def information_gain(x, y):
     """
     if isinstance(x, np.ndarray):
         x = x[:, None] if x.ndim == 1 else x
-        res = [partition_entropy(x[:, j], y) for j in range(x.shape[1])]
+        res = [partition_by(x[:, j], y) for j in range(x.shape[1])]
     elif isinstance(x, pd.DataFrame):
-        res = x.apply(lambda feature: partition_entropy(feature, y))
+        res = x.apply(lambda feature: partition_by(feature, y))
     else:
         raise NotImplementedError("Type x = {} is not implemented.".format(type(x)))
     return np.subtract(entropy(y), res)

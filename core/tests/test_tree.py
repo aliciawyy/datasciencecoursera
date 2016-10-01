@@ -22,6 +22,11 @@ class DecisionTreeTest(TestCase):
         result = tree.fit_id3(self.ch_data, self.ch_target)
         self.assertTupleEqual(result, self.id3_expected)
 
+    def test_fit_id3_gini(self):
+        id3 = tree.ID3("gini")
+        id3.fit(self.ch_data, self.ch_target)
+        self.assertTupleEqual(id3.root, self.id3_expected)
+
     def test_predict_id3(self):
         predict = functools.partial(tree.predict_id3, self.id3_expected)
         self.assertFalse(predict({"level": "Junior", "lang": "R", "tweets": "no", "phd": "yes"}))
@@ -38,3 +43,6 @@ class DecisionTreeTest(TestCase):
         self.assertTrue(id3.predict({"level": "Mid", "lang": "R", "tweets": "no", "phd": "yes"}))
         self.assertFalse(
             id3.predict({"level": "Senior", "lang": "R", "tweets": "no", "phd": "yes"}))
+
+    def test_init_raises(self):
+        self.assertRaises(NotImplementedError, tree.ID3, criterion="dummy")

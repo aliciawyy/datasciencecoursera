@@ -8,21 +8,21 @@ import dm_common
 import util
 
 
-def fit_id3(x, y):
+def fit_id3(x, y, criterion="entropy"):
     # x, y are supposed to be pandas DataFrame format
-    partition_entropy = functools.partial(util.partition_entropy, y=y)
-    entropy_by_feature = x.apply(partition_entropy)
-    min_entropy_feature = np.argmin(entropy_by_feature)
+    partition_by = functools.partial(util.partition_by, y=y, criterion=criterion)
+    disorder_by_feature = x.apply(partition_by)
+    min_disorder_feature = np.argmin(disorder_by_feature)
     root = {None: y.value_counts().idxmax()}  # default case
-    for feature in x[min_entropy_feature].unique():
-        subset = x[min_entropy_feature] == feature
+    for feature in x[min_disorder_feature].unique():
+        subset = x[min_disorder_feature] == feature
         y_subset = y[subset]
         if util.almost_zero(util.entropy(y_subset)) or x.shape[1] == 1:
             root[feature] = y_subset.value_counts().idxmax()
         else:
-            x_subset = x.drop(min_entropy_feature, 1).ix[subset]
+            x_subset = x.drop(min_disorder_feature, 1).ix[subset]
             root[feature] = fit_id3(x_subset, y_subset)
-    return min_entropy_feature, root
+    return min_disorder_feature, root
 
 
 def predict_id3(decision_tree, x):
@@ -37,11 +37,15 @@ class ID3(dm_common.StringMixin):
     https://en.wikipedia.org/wiki/ID3_algorithm
     """
 
-    def __init__(self):
+    def __init__(self, criterion="entropy"):
+        if criterion not in util.DISORDER_METRICS:
+            raise NotImplementedError("criterion = '{}' is not among the available disorder "
+                                      "metrics: {}".format(criterion, util.DISORDER_METRICS.keys()))
+        self.criterion = criterion
         self.root = None
 
     def fit(self, x, y):
-        self.root = fit_id3(x, y)
+        self.root = fit_id3(x, y, self.criterion)
 
     def predict(self, x):
         return predict_id3(self.root, x)
