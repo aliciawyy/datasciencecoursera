@@ -4,6 +4,7 @@ util functions
 from __future__ import division
 import collections
 import numpy as np
+import pandas as pd
 
 
 def group_probability(x):
@@ -54,6 +55,15 @@ def information_gain(x, y):
 
     H(y|x) can also be interpreted as the weighted average of children entropy
     """
-    x = x[:, None] if x.ndim == 1 else x
-    res = [partition_entropy(x[:, j], y) for j in range(x.shape[1])]
+    if isinstance(x, np.ndarray):
+        x = x[:, None] if x.ndim == 1 else x
+        res = [partition_entropy(x[:, j], y) for j in range(x.shape[1])]
+    elif isinstance(x, pd.DataFrame):
+        res = x.apply(lambda feature: partition_entropy(feature, y))
+    else:
+        raise NotImplementedError("Type x = {} is not implemented.".format(type(x)))
     return np.subtract(entropy(y), res)
+
+
+def almost_zero(x, epsilon=1e-10):
+    return np.abs(x) < epsilon

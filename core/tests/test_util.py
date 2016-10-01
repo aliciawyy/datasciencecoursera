@@ -23,6 +23,13 @@ class UtilTest(TestCase):
         self.assertAlmostEqual(util.gini(x), 0.5)
         self.assertAlmostEqual(util.gini(np.zeros(10)), 0.)
 
+    def test_almost_zero(self):
+        self.assertFalse(util.almost_zero(1e-5))
+        self.assertTrue(util.almost_zero(1e-5, 1e-4))
+
+    def test_information_gain_raises(self):
+        self.assertRaises(NotImplementedError, util.information_gain, [], [])
+
 
 def test_information_gain1():
     x = np.array([[0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1],

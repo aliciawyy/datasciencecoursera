@@ -5,6 +5,7 @@ data/season_1/training_data
 *.tar.gz
 *.DS_Store
 .coverage
+cover/
 
 
 .ipynb_checkpoints

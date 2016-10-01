@@ -1,9 +1,9 @@
 import pandas as pd
 
-import common
+import dm_common
 
 
-class Problem(common.StringMixin):
+class Problem(dm_common.StringMixin):
     def __init__(self, data, target):
         if data.shape[0] != len(target):
             raise ValueError("Then length of data '{}' and the length of target '{}' are not "
