@@ -41,14 +41,14 @@ def test_information_gain1():
     x = np.array([[0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1],
                   [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]]).transpose()
     df_x = pd.DataFrame(x)
-    y = [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1]
+    y = pd.Series([1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1])
     res = util.information_gain(df_x, y)
     assert_array_almost_equal(res, [0.654858,  0.979869])
 
 
 def test_information_gain2():
     x = np.array([0, 1, 0])
-    y = [0, 1, 0]
+    y = np.array([0, 1, 0])
     res = util.information_gain(x, y)
     assert_array_almost_equal(res, [0.918296])
 

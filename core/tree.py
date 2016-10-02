@@ -10,8 +10,8 @@ import util
 
 def fit_id3(x, y, criterion="entropy"):
     # x, y are supposed to be pandas DataFrame format
-    partition_by = functools.partial(util.partition_by, y=y, criterion=criterion)
-    disorder_by_feature = x.apply(partition_by)
+    partition_disorder = functools.partial(util.partition_disorder, y=y, criterion=criterion)
+    disorder_by_feature = x.apply(partition_disorder)
     min_disorder_feature = np.argmin(disorder_by_feature)
     root = {None: y.value_counts().idxmax()}  # default case
     for feature in x[min_disorder_feature].unique():

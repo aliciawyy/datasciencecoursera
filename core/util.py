@@ -42,13 +42,11 @@ def entropy(x):
     return - np.sum(group_probabilities * np.log2(group_probabilities))
 
 
-def partition_by(partition, y, criterion="entropy"):
+def partition_disorder(partition, y, criterion="entropy"):
+    subsets = [y[partition == part] for part in np.unique(partition)]
     num_samples = len(y)
-    subsets = collections.defaultdict(list)
     disorder_metric_func = DISORDER_METRICS[criterion]
-    for group, response in zip(partition, y):
-        subsets[group].append(response)
-    return np.sum(len(v) / num_samples * disorder_metric_func(v) for v in subsets.values())
+    return np.sum(len(v) / num_samples * disorder_metric_func(v) for v in subsets)
 
 
 def information_gain(x, y):
@@ -67,9 +65,9 @@ def information_gain(x, y):
     """
     if isinstance(x, np.ndarray):
         x = x[:, None] if x.ndim == 1 else x
-        res = [partition_by(x[:, j], y) for j in range(x.shape[1])]
+        res = [partition_disorder(x[:, j], y) for j in range(x.shape[1])]
     elif isinstance(x, pd.DataFrame):
-        res = x.apply(lambda feature: partition_by(feature, y))
+        res = x.apply(lambda feature: partition_disorder(feature, y))
     else:
         raise NotImplementedError("Type x = {} is not implemented.".format(type(x)))
     return np.subtract(entropy(y), res)
