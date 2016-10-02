@@ -49,10 +49,11 @@ class ID3(dm_common.StringMixin):
         self.root = fit_id3(x, y, self.criterion)
 
     def predict(self, x):
+        predict_with_root = functools.partial(predict_id3, self.root)
         if isinstance(x, pd.DataFrame):
-            result = {k: predict_id3(self.root, v) for k, v in x.to_dict(orient='index').items()}
+            result = {k: predict_with_root(v) for k, v in x.to_dict(orient='index').items()}
             return pd.Series(result)
-        return predict_id3(self.root, x)
+        return predict_with_root(x)
 
 
 class RandomForest(dm_common.StringMixin):
