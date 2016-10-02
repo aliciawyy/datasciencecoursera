@@ -37,12 +37,33 @@ class DecisionTreeTest(TestCase):
         self.assertTrue(predict({"lang": "java", "tweets": "yes", "phd": "yes"}))
         self.assertFalse(predict({"level": "Senior", "lang": "R"}))
 
-    def test_class_ID3(self):
+    def test_class_ID3_predict_single(self):
         id3 = tree.ID3()
         id3.fit(self.ch_data, self.ch_target)
         self.assertTrue(id3.predict({"level": "Mid", "lang": "R", "tweets": "no", "phd": "yes"}))
-        self.assertFalse(
-            id3.predict({"level": "Senior", "lang": "R", "tweets": "no", "phd": "yes"}))
+        self.assertFalse(id3.predict({"level": "Senior"}))
+
+    def test_class_ID3_predict_multiple(self):
+        id3 = tree.ID3()
+        id3.fit(self.ch_data, self.ch_target)
+        x = self.ch_data.ix[:4]
+        y = id3.predict(x)
+        self.assertListEqual(list(y), [False, False, True, True, True])
 
     def test_init_raises(self):
         self.assertRaises(NotImplementedError, tree.ID3, criterion="dummy")
+
+
+class RandomForestTest(DecisionTreeTest):
+    def test_forest_predict_single(self):
+        forest = tree.RandomForest(5, 0)
+        forest.fit(self.ch_data, self.ch_target)
+        result = forest.predict({"level": "Senior", "lang": "R", "tweets": "no", "phd": "yes"})
+        self.assertFalse(result)
+
+    def test_forest_predict_multiple(self):
+        forest = tree.RandomForest(5, 0)
+        forest.fit(self.ch_data, self.ch_target)
+        result = forest.predict(self.ch_data.ix[:4])
+        self.assertListEqual(list(result), [False, False, True, True, True])
+

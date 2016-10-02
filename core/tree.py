@@ -2,6 +2,7 @@
 Tree algorithm
 """
 import functools
+import pandas as pd
 import numpy as np
 
 import dm_common
@@ -48,8 +49,30 @@ class ID3(dm_common.StringMixin):
         self.root = fit_id3(x, y, self.criterion)
 
     def predict(self, x):
+        if isinstance(x, pd.DataFrame):
+            result = {k: predict_id3(self.root, v) for k, v in x.to_dict(orient='index').items()}
+            return pd.Series(result)
         return predict_id3(self.root, x)
 
 
+class RandomForest(dm_common.StringMixin):
+    def __init__(self, num_trees=10, random_state=0):
+        self.trees = [ID3() for _ in range(num_trees)]
+        self.random_state = random_state
+        np.random.seed(self.random_state)
 
+    def fit(self, x, y):
+        for current_tree in self.trees:
+            random_state = self.random_state + np.random.randint(10)
+            x_bootstrap_sample = x.sample(len(x), replace=True, random_state=random_state)
+            y_bootstrap_sample = y[x_bootstrap_sample.index]
+            current_tree.fit(x_bootstrap_sample, y_bootstrap_sample)
+
+    def predict(self, x):
+        votes = [current_tree.predict(x) for current_tree in self.trees]
+        if isinstance(x, pd.DataFrame):
+            df_votes = pd.concat(votes, axis=1)
+            return df_votes.apply(util.most_common, axis=1)
+        else:
+            return util.most_common(votes)
 

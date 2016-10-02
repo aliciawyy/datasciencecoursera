@@ -75,3 +75,7 @@ def information_gain(x, y):
 
 def almost_zero(x, epsilon=1e-10):
     return np.abs(x) < epsilon
+
+
+def most_common(x):
+    return collections.Counter(x).most_common(1)[0][0]
