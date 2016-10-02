@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 
 import dm_common
+import struct
 import util
 
 
@@ -65,9 +66,7 @@ class RandomForest(dm_common.StringMixin):
     def fit(self, x, y):
         for current_tree in self.trees:
             random_state = self.random_state + np.random.randint(10)
-            x_bootstrap_sample = x.sample(len(x), replace=True, random_state=random_state)
-            y_bootstrap_sample = y[x_bootstrap_sample.index]
-            current_tree.fit(x_bootstrap_sample, y_bootstrap_sample)
+            current_tree.fit(*struct.get_bootstrap_sample(x, y, random_state=random_state))
 
     def predict(self, x):
         votes = [current_tree.predict(x) for current_tree in self.trees]

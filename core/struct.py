@@ -1,6 +1,11 @@
-import pandas as pd
-from sklearn import cross_validation
+from sklearn import model_selection
 import dm_common
+
+
+def get_bootstrap_sample(x, y, random_state=0):
+    # x should be of type pandas DataFrame
+    x_bootstrap = x.sample(len(x), random_state=random_state, replace=True)
+    return x_bootstrap, y[x_bootstrap.index]
 
 
 class Problem(dm_common.StringMixin):
@@ -25,10 +30,20 @@ class Problem(dm_common.StringMixin):
     def target(self):
         return self._target
 
+    @property
+    def index(self):
+        return self.data.index
+
     def train_test_split(self, test_size=0.2, random_state=0):
-        x_train, x_test, y_train, y_test = cross_validation.train_test_split(
+        x_train, x_test, y_train, y_test = model_selection.train_test_split(
             self.data, self.target, test_size=test_size, random_state=random_state)
         problem_train = Problem(x_train, y_train)
         problem_test = Problem(x_test, y_test)
         return problem_train, problem_test
+
+    def get_bootstrap_sample(self, random_state=0):
+        return Problem(*get_bootstrap_sample(self.data, self.target, random_state))
+
+    def __len__(self):
+        return len(self.target)
 
