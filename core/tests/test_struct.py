@@ -30,8 +30,10 @@ class ProblemTest(TestCase):
         pb_train, pb_test = self.problem.train_test_split(0.285714, 0)
         self.assertEqual(len(pb_train.target), 10)
         self.assertEqual(len(pb_train.data), 10)
+        self.assertListEqual(list(pb_train.data.index), list(pb_train.target.index))
         self.assertEqual(len(pb_test.data), 4)
         self.assertEqual(len(pb_test.target), 4)
+        self.assertListEqual(list(pb_test.data.index), list(pb_test.target.index))
 
     def test_get_bootstrap_sample(self):
         bootstrap_sample = self.problem.get_bootstrap_sample(10)
