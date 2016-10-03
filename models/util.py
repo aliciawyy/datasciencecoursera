@@ -3,6 +3,7 @@ util functions
 """
 from __future__ import division
 import collections
+import functools
 import numpy as np
 import pandas as pd
 
@@ -63,11 +64,12 @@ def information_gain(x, y):
 
     H(y|x) can also be interpreted as the weighted average of children entropy
     """
+    disorder_measure = functools.partial(partition_disorder, y=y)
     if isinstance(x, np.ndarray):
         x = x[:, None] if x.ndim == 1 else x
-        res = [partition_disorder(x[:, j], y) for j in range(x.shape[1])]
+        res = np.apply_along_axis(disorder_measure, axis=0, arr=x)
     elif isinstance(x, pd.DataFrame):
-        res = x.apply(lambda feature: partition_disorder(feature, y))
+        res = x.apply(disorder_measure)
     else:
         raise NotImplementedError("Type x = {} is not implemented.".format(type(x)))
     return np.subtract(entropy(y), res)

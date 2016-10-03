@@ -1,7 +1,7 @@
 import functools
 from numpy.testing import TestCase, assert_array_almost_equal
 
-from core import tree
+from models import tree
 from data import api
 
 

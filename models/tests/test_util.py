@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from numpy.testing import TestCase, assert_array_almost_equal
 
-from core import util
+from models import util
 
 
 class UtilTest(TestCase):

@@ -2,7 +2,7 @@ import numpy as np
 from numpy.testing import TestCase, assert_array_almost_equal
 
 from data import api
-from core import struct
+from models import struct
 
 
 class ProblemTest(TestCase):

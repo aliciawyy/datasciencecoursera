@@ -10,7 +10,7 @@ install:
 
 script:
   - export PYTHONPATH=$PWD/aliciawyy/dmining:$PYTHONPATH
-  - nosetests ./core/tests --with-coverage --cover-package=core --cover-html --cover-erase -v
+  - nosetests ./models/tests --with-coverage --cover-package=models --cover-html --cover-erase -v
 
  # Coverage report
 after_success:
