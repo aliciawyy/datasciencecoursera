@@ -56,13 +56,13 @@ class DecisionTreeTest(TestCase):
 
 class RandomForestTest(DecisionTreeTest):
     def test_forest_predict_single(self):
-        forest = tree.RandomForest(5, 0)
+        forest = tree.BootstrapRandomForest(5, 0)
         forest.fit(self.ch_data, self.ch_target)
         result = forest.predict({"level": "Senior", "lang": "R", "tweets": "no", "phd": "yes"})
         self.assertFalse(result)
 
     def test_forest_predict_multiple(self):
-        forest = tree.RandomForest(5, 0)
+        forest = tree.BootstrapRandomForest(5, 0)
         forest.fit(self.ch_data, self.ch_target)
         result = forest.predict(self.ch_data.ix[:4])
         self.assertListEqual(list(result), [False, False, True, True, True])

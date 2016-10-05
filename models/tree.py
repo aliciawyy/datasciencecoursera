@@ -8,6 +8,7 @@ import numpy as np
 import dm_common
 import struct
 import util
+import operator
 
 
 def fit_id3(x, y, criterion="entropy"):
@@ -57,22 +58,7 @@ class ID3(dm_common.StringMixin):
         return predict_with_root(x)
 
 
-class RandomForest(dm_common.StringMixin):
+class BootstrapRandomForest(operator.BaggingClassifier):
     def __init__(self, num_trees=10, random_state=0):
-        self.trees = [ID3() for _ in range(num_trees)]
-        self.random_state = random_state
-        np.random.seed(self.random_state)
-
-    def fit(self, x, y):
-        for current_tree in self.trees:
-            random_state = self.random_state + np.random.randint(10)
-            current_tree.fit(*struct.get_bootstrap_sample(x, y, random_state=random_state))
-
-    def predict(self, x):
-        votes = [current_tree.predict(x) for current_tree in self.trees]
-        if isinstance(x, pd.DataFrame):
-            df_votes = pd.concat(votes, axis=1)
-            return df_votes.apply(util.most_common, axis=1)
-        else:
-            return util.most_common(votes)
+        super(self.__class__, self).__init__(ID3, num_trees, random_state)
 

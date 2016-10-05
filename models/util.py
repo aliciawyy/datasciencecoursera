@@ -66,7 +66,7 @@ def information_gain(x, y):
     """
     disorder_measure = functools.partial(partition_disorder, y=y)
     if isinstance(x, np.ndarray):
-        x = x[:, None] if x.ndim == 1 else x
+        x = x.T if x.ndim == 1 else x
         res = np.apply_along_axis(disorder_measure, axis=0, arr=x)
     elif isinstance(x, pd.DataFrame):
         res = x.apply(disorder_measure)
