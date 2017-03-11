@@ -2,28 +2,24 @@ from os import path
 import sys
 import numpy as np
 
-JAM_DATA_DIR = path.join(path.dirname(__file__), "..", "data", "musical")
+DATA_DIR = path.join(path.dirname(__file__), "..", "data", "understudy")
 
 
 def get_local_data(name="sample"):
-    filename1 = path.join(JAM_DATA_DIR, name + ".in")
+    filename1 = path.join(DATA_DIR, name + ".in")
     f = file(filename1, "r")
     n_sample = int(f.readline())
-    role_num_list = []
     prob_absent_list = []
     for i, line in enumerate(f.readlines()):
-        if i % 2 == 0:
-            role_num_list.append(int(line))
-        else:
+        if i % 2 == 1:
             prob_absent = [float(s) for s in line.split(" ")]
             prob_absent_list.append(prob_absent)
-    return role_num_list, prob_absent_list, name
+    return prob_absent_list, name
 
 
-def solve(role_num_list, prob_absent_list, name):
-    out_file = file(path.join(JAM_DATA_DIR, name + ".out"), "w")
-    for i, (n_role, prob_absent) in enumerate(
-            zip(role_num_list, prob_absent_list), 1):
+def solve(prob_absent_list, name):
+    out_file = file(path.join(DATA_DIR, name + ".out"), "w")
+    for i, prob_absent in enumerate(prob_absent_list, 1):
         show_success = ShowSuccess(prob_absent)
         prob = show_success.probability()
         out_file.write("Case #{}: {}\n".format(i, prob))
