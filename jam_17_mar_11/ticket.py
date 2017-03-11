@@ -1,20 +1,18 @@
 import sys
-from os import path
 import operator
 from collections import defaultdict
 
 
-class TicketSolver:
-    DATA_DIR = path.join(path.dirname(__file__), "..", "data", "ticket")
+from util import SolverBase
 
-    def __init__(self, name):
-        self.name = name
+
+class TicketSolver(SolverBase):
 
     def __call__(self):
-        data_input, n_sample = self.get_local_data()
+        data_input = self.get_local_data()
         current_ind = 0
         out_file = self._get_file_handler('out')
-        for i in xrange(1, n_sample + 1):
+        for i in xrange(1, self.n_sample_ + 1):
             n_friends, n_grid = data_input[current_ind]
             end = current_ind + n_friends + 1
             tickets = data_input[current_ind + 1:end]
@@ -24,16 +22,11 @@ class TicketSolver:
             current_ind = end
         out_file.close()
 
-    def _get_file_handler(self, ext):
-        op = 'r' if ext == 'in' else 'w'
-        return file(path.join(self.DATA_DIR, self.name + "." + ext), op)
-
     def get_local_data(self):
-        f = self._get_file_handler('in')
-        n_sample = int(f.readline())
+        f = self._get_input_file()
         data_input = [[int(s) for s in line.split(" ")]
                       for line in f.readlines()]
-        return data_input, n_sample
+        return data_input
 
 
 class TicketTrouble:
@@ -57,4 +50,5 @@ class TicketTrouble:
 
 
 if __name__ == '__main__':
+    # python ticket.py A-large-practice
     TicketSolver(sys.argv[1])()

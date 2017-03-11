@@ -1,29 +1,28 @@
-from os import path
 import sys
 import numpy as np
 
-DATA_DIR = path.join(path.dirname(__file__), "..", "data", "understudy")
+from util import SolverBase
 
 
-def get_local_data(name="sample"):
-    filename1 = path.join(DATA_DIR, name + ".in")
-    f = file(filename1, "r")
-    n_sample = int(f.readline())
-    prob_absent_list = []
-    for i, line in enumerate(f.readlines()):
-        if i % 2 == 1:
-            prob_absent = [float(s) for s in line.split(" ")]
-            prob_absent_list.append(prob_absent)
-    return prob_absent_list, name
+class UnderStudySolver(SolverBase):
 
+    def get_local_data(self):
+        f = self._get_input_file()
+        prob_absent_list = []
+        for i, line in enumerate(f.readlines()):
+            if i % 2 == 1:
+                prob_absent = [float(s) for s in line.split(" ")]
+                prob_absent_list.append(prob_absent)
+        return prob_absent_list
 
-def solve(prob_absent_list, name):
-    out_file = file(path.join(DATA_DIR, name + ".out"), "w")
-    for i, prob_absent in enumerate(prob_absent_list, 1):
-        show_success = ShowSuccess(prob_absent)
-        prob = show_success.probability()
-        out_file.write("Case #{}: {}\n".format(i, prob))
-    out_file.close()
+    def __call__(self):
+        prob_absent_list = self.get_local_data()
+        out_file = self._get_file_handler('out')
+        for i, prob_absent in enumerate(prob_absent_list, 1):
+            show_success = ShowSuccess(prob_absent)
+            prob = show_success.probability()
+            out_file.write("Case #{}: {}\n".format(i, prob))
+        out_file.close()
 
 
 class ShowSuccess(object):
@@ -39,4 +38,5 @@ class ShowSuccess(object):
 
 
 if __name__ == "__main__":
-    solve(*get_local_data(sys.argv[1]))
+    # python understudy.py B-large-practice
+    UnderStudySolver(sys.argv[1])()

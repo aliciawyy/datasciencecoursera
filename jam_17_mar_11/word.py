@@ -1,16 +1,15 @@
-from os import path
-import operator
-from collections import defaultdict
-
-JAM_DATA_DIR = path.join(path.dirname(__file__), "..", "data")
 
 
-def get_local_data(name="C-sample"):
-    filename1 = path.join(JAM_DATA_DIR, name + ".in")
-    f = file(filename1, "r")
-    n_sample = int(f.readline())
-    data_input = [[int(s) for s in line.split(" ")] for line in f.readlines()]
-    return data_input, name
+from util import SolverBase
+
+
+class WordSolver(SolverBase):
+
+    def get_local_data(self):
+        f = self._get_file_handler('in')
+        n_sample = int(f.readline())
+        data_input = [[int(s) for s in line.split(" ")] for line in f.readlines()]
+        return data_input, name
 
 
 def solve(data_input, name):
