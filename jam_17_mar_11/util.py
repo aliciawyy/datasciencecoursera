@@ -20,3 +20,9 @@ class SolverBase:
         self.n_sample_ = int(f.readline())
         return f
 
+    def _write_result(self, result):
+        f = self._get_file_handler('out')
+        for line in result:
+            f.write(line)
+        f.close()
+
