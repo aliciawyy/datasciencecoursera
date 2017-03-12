@@ -8,10 +8,10 @@ class UnderStudySolver(SolverBase):
 
     def __call__(self):
         result = []
-        for i, line in self._enumerate_input():
+        for i, line in enumerate(self._iter_input()):
             if i % 2 == 0:
                 continue
-            prob_absent = [float(s) for s in line.split(" ")]
+            prob_absent = self._split_line_to_list(line, float)
             show_success = ShowSuccess(prob_absent)
             prob = show_success.probability()
             result.append(prob)

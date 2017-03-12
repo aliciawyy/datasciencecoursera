@@ -23,9 +23,9 @@ class SolverBase:
         self.n_sample_ = int(f.readline())
         return f
 
-    def _enumerate_input(self):
+    def _iter_input(self):
         with self._get_input_file() as f:
-            return iter(enumerate(f.readlines()))
+            return iter(f.readlines())
 
     @staticmethod
     def _split_line_to_list(line, fmt=int):

@@ -12,7 +12,7 @@ class TicketSolver(SolverBase):
         data_input = self.get_local_data()
         current_ind = 0
         result = []
-        for i in range(1, self.n_sample_ + 1):
+        for i in range(self.n_sample_):
             n_friends, n_grid = data_input[current_ind]
             end = current_ind + n_friends + 1
             tickets = data_input[current_ind + 1:end]
@@ -23,8 +23,7 @@ class TicketSolver(SolverBase):
         self._write_result(result)
 
     def get_local_data(self):
-        data_input = [self._split_line_to_list(line, int)
-                      for _, line in self._enumerate_input()]
+        data_input = map(self._split_line_to_list, self._iter_input())
         return data_input
 
 

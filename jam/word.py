@@ -7,8 +7,8 @@ class WordSolver(SolverBase):
 
     def __call__(self):
         result = []
-        for i, line in self._enumerate_input():
-            grid_max, n = (int(p) for p in line.split(" "))
+        for line in self._iter_input():
+            grid_max, n = self._split_line_to_list(line)
             gen = IOGenerator(grid_max, n)
             grid = gen.grid()
             result.append(grid)
