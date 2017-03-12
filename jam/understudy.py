@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 
-from util import SolverBase
+from .util import SolverBase
 
 
 class UnderStudySolver(SolverBase):

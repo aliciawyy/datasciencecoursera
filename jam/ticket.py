@@ -3,7 +3,7 @@ import operator
 from collections import defaultdict
 
 
-from util import SolverBase
+from .util import SolverBase
 
 
 class TicketSolver(SolverBase):

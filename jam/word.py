@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-from util import SolverBase
+from .util import SolverBase
 
 
 class WordSolver(SolverBase):
@@ -50,5 +50,5 @@ class IOGenerator(object):
 
 
 if __name__ == "__main__":
-    # python word.py C-small-practice
+    # python -m jam.word C-small-practice
     WordSolver(sys.argv[1])()
