@@ -21,7 +21,7 @@ class UnderStudySolver(SolverBase):
 class ShowSuccess(object):
     def __init__(self, prob_absent):
         self.prob_absent = prob_absent
-        self.n_role = len(self.prob_absent) / 2
+        self.n_role = int(len(self.prob_absent) / 2)
 
     def probability(self):
         prob_absent = np.sort(self.prob_absent)
