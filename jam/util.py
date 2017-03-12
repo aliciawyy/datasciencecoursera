@@ -45,3 +45,24 @@ class SolverBase(object):
             f.write("Case #{}:{}{}\n".format(i, sep, line))
         f.close()
 
+
+def sum_of_int(n, mod=None):
+    x = int(n * (n + 1) / 2)
+    if mod is not None:
+        x = x % mod
+    return x
+
+
+def sum_of_int_square(n, mod=None):
+    result = int(n * (n + 1) * (n * 2 + 1) / 6)
+    if mod is not None:
+        result = result % mod
+    return result
+
+
+def sum_of_int_cube(n, mod=None):
+    def _mod(y):
+        return y if mod is None else y % mod
+    x = int(n * (n + 1) / 2)
+    x = _mod(x)
+    return _mod(x * x)

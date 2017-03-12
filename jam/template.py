@@ -1,9 +1,9 @@
 import sys
 
-from .util import SolverBase
+from . import util
 
 
-class XXXSolver(SolverBase):
+class XXXSolver(util.SolverBase):
 
     def __call__(self):
         result = []
