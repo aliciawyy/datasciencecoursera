@@ -31,5 +31,5 @@ class ShowSuccess(object):
 
 
 if __name__ == "__main__":
-    # python understudy.py B-large-practice
+    # python -m jam.understudy B-large-practice
     UnderStudySolver(sys.argv[1])()

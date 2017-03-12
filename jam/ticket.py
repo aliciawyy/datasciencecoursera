@@ -11,21 +11,20 @@ class TicketSolver(SolverBase):
     def __call__(self):
         data_input = self.get_local_data()
         current_ind = 0
-        out_file = self._get_file_handler('out')
-        for i in xrange(1, self.n_sample_ + 1):
+        result = []
+        for i in range(1, self.n_sample_ + 1):
             n_friends, n_grid = data_input[current_ind]
             end = current_ind + n_friends + 1
             tickets = data_input[current_ind + 1:end]
             t_trouble = TicketTrouble(n_grid, tickets)
             max_in_row = t_trouble.max_in_one_row()
-            out_file.write("Case #{}: {}\n".format(i, max_in_row))
+            result.append(max_in_row)
             current_ind = end
-        out_file.close()
+        self._write_result(result)
 
     def get_local_data(self):
-        f = self._get_input_file()
-        data_input = [[int(s) for s in line.split(" ")]
-                      for line in f.readlines()]
+        data_input = [self._split_line_to_list(line, int)
+                      for _, line in self._enumerate_input()]
         return data_input
 
 
@@ -50,5 +49,5 @@ class TicketTrouble:
 
 
 if __name__ == '__main__':
-    # python ticket.py A-large-practice
+    # python -m jam.ticket A-large-practice
     TicketSolver(sys.argv[1])()

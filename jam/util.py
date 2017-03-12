@@ -13,7 +13,10 @@ class SolverBase:
 
     def _get_file_handler(self, ext):
         op = 'w' if ext == 'out' else 'r'
-        return open(path.join(self.data_dir, self.name + "." + ext), op)
+        return open(self.get_filename(ext), op)
+
+    def get_filename(self, ext):
+        return path.join(self.data_dir, self.name + "." + ext)
 
     def _get_input_file(self):
         f = self._get_file_handler('in')
@@ -23,6 +26,10 @@ class SolverBase:
     def _enumerate_input(self):
         with self._get_input_file() as f:
             return iter(enumerate(f.readlines()))
+
+    @staticmethod
+    def _split_line_to_list(line, fmt=int):
+        return [fmt(s) for s in line.split(" ")]
 
     def _write_result(self, result, sep=" "):
         f = self._get_file_handler('out')
