@@ -34,7 +34,7 @@ class SolverBase:
     def _write_result(self, result, sep=" "):
         assert len(result) == self.n_sample_, \
             "length of result '{}' should be equal to the number of samples " \
-            "{}.".format(len(result), self.n_sample_)
+            "{} for {}.".format(len(result), self.n_sample_, self.__class__)
         f = self._get_file_handler('out')
         for i, line in enumerate(result, 1):
             f.write("Case #{}:{}{}\n".format(i, sep, line))
