@@ -2,6 +2,7 @@ language: python
 
 python:
   - "2.7"
+  - "3.5"
 
 install:
   - pip install -U pip
@@ -10,7 +11,7 @@ install:
 
 script:
   - export PYTHONPATH=$PWD/aliciawyy/dmining:$PYTHONPATH
-  - nosetests ./models/tests --with-coverage --cover-package=models --cover-html --cover-erase -v
+  - nosetests . --with-coverage --cover-package=. --cover-html --cover-erase -v
 
  # Coverage report
 after_success:
