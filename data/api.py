@@ -16,5 +16,6 @@ def load_candidates_to_hire_data():
 
 
 def load_spam_data():
-    # source ftp://ftp.ics.uci.edu/pub/machine-learning-databases/spambase/spambase.data
+    # source ftp://ftp.ics.uci.edu/pub/machine-learning-databases
+    # /spambase/spambase.data
     return data_reader("spam")

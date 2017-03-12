@@ -11,8 +11,8 @@ class GaussianNB(naive_bayes.GaussianNB):
                      sample_weight=None):
 
         """
-        Adapt the class with the same name in scikit-learn to accept missing data in the given X
-        and y.
+        Adapt the class with the same name in scikit-learn to accept missing 
+        data in the given X and y.
         """
         # If the ratio of data variance between dimensions is too small, it
         # will cause numerical errors. To address this, we artificially
@@ -32,7 +32,8 @@ class GaussianNB(naive_bayes.GaussianNB):
             self.theta_ = np.zeros((n_classes, n_features))
             self.sigma_ = np.zeros((n_classes, n_features))
 
-            self.class_count_ = np.zeros((n_classes, n_features), dtype=np.int64)
+            self.class_count_ = np.zeros((n_classes, n_features),
+                                         dtype=np.int64)
             self.class_prior_ = np.zeros(n_classes, dtype=np.float64)
 
             # Initialise the class prior
