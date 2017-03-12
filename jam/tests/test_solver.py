@@ -3,12 +3,14 @@ from numpy.testing import TestCase
 from ..ticket import TicketSolver
 from ..understudy import UnderStudySolver
 from ..word import WordSolver
+from ..square_count import SquareCountSolver
 
 
 class SolverTest(TestCase):
 
     def test_sample_same_as_ref(self):
-        for sub in [TicketSolver, UnderStudySolver, WordSolver]:
+        for sub in [TicketSolver, UnderStudySolver, WordSolver,
+                    SquareCountSolver]:
             solver = sub("sample")
             self._assert_sample_same_as_ref(solver)
 
