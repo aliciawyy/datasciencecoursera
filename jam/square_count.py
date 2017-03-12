@@ -23,14 +23,12 @@ class DotGrid:
         self.n_col = n_col
 
     def __call__(self):
-        width = min(self.n_dots, self.n_col)
-        length = max(self.n_dots, self.n_col)
-        diff = length - width
-        n = width - 1
-        n_square = - sum_of_int_cube(n, self.threshold)
-        n_square += (width - diff) * sum_of_int_square(n, self.threshold)
-        n_square = self._mod(n_square)
-        n_square += width * diff * sum_of_int(n, self.threshold)
+        # sum[(r-k)*(c-k)*k], 1  <= k <= min(r, c) - 1
+        n = min(self.n_dots, self.n_col) - 1
+        n_square = sum_of_int_cube(n, self.threshold)
+        square_sum = sum_of_int_square(n, self.threshold)
+        n_square -= self._mod((self.n_dots + self.n_col) * square_sum)
+        n_square += self.n_dots * self.n_col * sum_of_int(n, self.threshold)
         return self._mod(n_square)
 
     def _mod(self, x):
