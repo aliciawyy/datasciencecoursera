@@ -1,3 +1,6 @@
+"""
+Replace XXX with the name of problem
+"""
 import sys
 
 from . import util
@@ -9,14 +12,14 @@ class XXXSolver(util.SolverBase):
         result = []
         for line in self._iter_input():
             x = self._split_line_to_list(line, int)
-            xxx_obj = XXX(x)
-            prob = xxx_obj()
+            obj = XXX(x)
+            prob = obj()
             result.append(prob)
         self._write_result(result)
 
 
 class XXX(object):
-    def __init__(self, x):
+    def __init__(self):
         pass
 
     def __call__(self):

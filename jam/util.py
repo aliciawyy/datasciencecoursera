@@ -14,6 +14,7 @@ class SolverBase(object):
             if self.name == "sample":
                 open(self.get_filename("in"), "w").close()
                 open(self.get_filename("out"), "w").close()
+                open(self.get_filename("out.ref"), "w").close()
         self.n_sample_ = 0
 
     def _get_file_handler(self, ext):
@@ -46,23 +47,28 @@ class SolverBase(object):
         f.close()
 
 
+def _mod(x, mod):
+    """mod is useful for large numbers"""
+    return x if mod is None else x % mod
+
+
 def sum_of_int(n, mod=None):
     x = int(n * (n + 1) / 2)
-    if mod is not None:
-        x = x % mod
-    return x
+    return _mod(x, mod)
 
 
 def sum_of_int_square(n, mod=None):
-    result = int(n * (n + 1) * (n * 2 + 1) / 6)
-    if mod is not None:
-        result = result % mod
-    return result
+    x = int(n * (n + 1) * (n * 2 + 1) / 6)
+    return _mod(x, mod)
 
 
 def sum_of_int_cube(n, mod=None):
-    def _mod(y):
-        return y if mod is None else y % mod
     x = int(n * (n + 1) / 2)
-    x = _mod(x)
-    return _mod(x * x)
+    x = _mod(x, mod)
+    return _mod(x * x, mod)
+
+
+def reflex(cond):
+    def reflex_cond(p1, p2):
+        return cond(p1, p2) or cond(p2, p1)
+    return reflex_cond
