@@ -1,6 +1,3 @@
-"""
-util functions
-"""
 from __future__ import division
 import collections
 import functools
@@ -24,22 +21,23 @@ def group_probability(x):
 
 @disorder_metric
 def gini(x):
-    group_probabilities = group_probability(x).values()
+    group_probabilities = list(group_probability(x).values())
     return np.sum(group_probabilities * np.subtract(1, group_probabilities))
 
 
 @disorder_metric
 def entropy(x):
     """
-    Entropy is an attribute of a random variable that measures its disorder. The higher the entropy
-    is, the higher the disorder is, i.e. the less it can be predicted.
+    Entropy is an attribute of a random variable that measures its disorder.
+    The higher the entropy is, the higher the disorder is,
+    i.e. the less it can be predicted.
 
-    In the binary case, if the probability of an event is 50%, it corresponds to the highest
-    disorder.
+    In the binary case, if the probability of an event is 50%,
+    it corresponds to the highest disorder.
 
     A good training set requires higher entropy.
     """
-    group_probabilities = group_probability(x).values()
+    group_probabilities = list(group_probability(x).values())
     return - np.sum(group_probabilities * np.log2(group_probabilities))
 
 
@@ -47,13 +45,15 @@ def partition_disorder(partition, y, criterion="entropy"):
     subsets = [y[partition == part] for part in np.unique(partition)]
     num_samples = len(y)
     disorder_metric_func = DISORDER_METRICS[criterion]
-    return np.sum(len(v) / num_samples * disorder_metric_func(v) for v in subsets)
+    return np.sum(len(v) / num_samples * disorder_metric_func(v)
+                  for v in subsets)
 
 
 def information_gain(x, y):
     """
-    Information gain tells us how important a given feature is. It is used when we want to determine
-    which attribute in a given set of training feature vectors is most useful for discriminating
+    Information gain tells us how important a given feature is. It is used 
+    when we want to determine which attribute in a given set of training 
+    feature vectors is most useful for discriminating
     between the classes to be learned.
 
     Information gain is defined as IG(x, y) = H(y) - H(y|x)
@@ -71,7 +71,9 @@ def information_gain(x, y):
     elif isinstance(x, pd.DataFrame):
         res = x.apply(disorder_measure)
     else:
-        raise NotImplementedError("Type x = {} is not implemented.".format(type(x)))
+        raise NotImplementedError(
+            "Type x = {} is not implemented.".format(type(x))
+        )
     return np.subtract(entropy(y), res)
 
 
