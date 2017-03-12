@@ -6,15 +6,13 @@ from util import SolverBase
 class WordSolver(SolverBase):
 
     def __call__(self):
-        f_in = self._get_input_file()
         result = []
-        for i, line in enumerate(f_in.readlines(), 1):
+        for i, line in self._enumerate_input():
             grid_max, n = (int(p) for p in line.split(" "))
             gen = IOGenerator(grid_max, n)
             grid = gen.grid()
-            result.append("Case #{}:\n{}".format(i, grid))
-        f_in.close()
-        self._write_result(result)
+            result.append(grid)
+        self._write_result(result, "\n")
 
 
 class IOGenerator(object):
@@ -29,9 +27,9 @@ class IOGenerator(object):
 
     def grid(self):
         if self.n == 0:
-            return "IO\n"
+            return "IO"
         elif self.n <= self.max_num_per_line:
-            return self.horizontal_pattern * self.n + "\n"
+            return self.horizontal_pattern * self.n
         full_line = self.horizontal_pattern * self.max_num_per_line
         result = [full_line]
         n = self.n - self.max_num_per_line
@@ -48,7 +46,7 @@ class IOGenerator(object):
                 break
             if len(result) == self.grid_max:
                 raise ValueError("error")
-        return "\n".join(result) + "\n"
+        return "\n".join(result)
 
 
 if __name__ == "__main__":

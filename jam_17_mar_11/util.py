@@ -20,9 +20,13 @@ class SolverBase:
         self.n_sample_ = int(f.readline())
         return f
 
-    def _write_result(self, result):
+    def _enumerate_input(self):
+        with self._get_input_file() as f:
+            return iter(enumerate(f.readlines()))
+
+    def _write_result(self, result, sep=" "):
         f = self._get_file_handler('out')
-        for line in result:
-            f.write(line)
+        for i, line in enumerate(result, 1):
+            f.write("Case #{}:{}{}\n".format(i, sep, line))
         f.close()
 

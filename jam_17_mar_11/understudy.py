@@ -8,16 +8,13 @@ class UnderStudySolver(SolverBase):
 
     def __call__(self):
         result = []
-        f = self._get_input_file()
-        for i, line in enumerate(f.readlines()):
+        for i, line in self._enumerate_input():
             if i % 2 == 0:
                 continue
             prob_absent = [float(s) for s in line.split(" ")]
             show_success = ShowSuccess(prob_absent)
             prob = show_success.probability()
-            j_case = i / 2 + 1
-            result.append("Case #{}: {}\n".format(j_case, prob))
-        f.close()
+            result.append(prob)
         self._write_result(result)
 
 
