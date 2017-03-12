@@ -23,7 +23,7 @@ class TicketSolver(SolverBase):
         self._write_result(result)
 
     def get_local_data(self):
-        data_input = map(self._split_line_to_list, self._iter_input())
+        data_input = list(map(self._split_line_to_list, self._iter_input()))
         return data_input
 
 
