@@ -1,7 +1,7 @@
-from os import path
+from os import path, mkdir
 
 
-class SolverBase:
+class SolverBase(object):
     all_data_dir = path.join(path.dirname(__file__), "..", "data")
 
     def __init__(self, name):
@@ -9,6 +9,11 @@ class SolverBase:
         class_name = self.__class__.__name__
         ind = class_name.find("Solver")
         self.data_dir = path.join(self.all_data_dir, class_name[:ind].lower())
+        if not path.exists(self.data_dir):
+            mkdir(self.data_dir)
+            if self.name == "sample":
+                open(self.get_filename("in"), "w").close()
+                open(self.get_filename("out"), "w").close()
         self.n_sample_ = 0
 
     def _get_file_handler(self, ext):

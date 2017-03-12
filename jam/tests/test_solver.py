@@ -1,16 +1,16 @@
 from numpy.testing import TestCase
+from ..util import SolverBase
 
-from ..ticket import TicketSolver
-from ..understudy import UnderStudySolver
-from ..word import WordSolver
-from ..square_count import SquareCountSolver
+import logging
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger(__name__)
 
 
 class SolverTest(TestCase):
 
     def test_sample_same_as_ref(self):
-        for sub in [TicketSolver, UnderStudySolver, WordSolver,
-                    SquareCountSolver]:
+        for sub in SolverBase.__subclasses__():
+            log.debug('Test class {}'.format(sub.__name__))
             solver = sub("sample")
             self._assert_sample_same_as_ref(solver)
 
