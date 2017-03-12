@@ -45,7 +45,7 @@ class TicketTrouble:
             result[row] += 1
             if col != row:
                 result[col] += 1
-        return max(result.iteritems(), key=operator.itemgetter(1))[1]
+        return max(result.items(), key=operator.itemgetter(1))[1]
 
 
 if __name__ == '__main__':
