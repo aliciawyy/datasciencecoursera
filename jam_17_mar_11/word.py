@@ -50,5 +50,5 @@ class IOGenerator(object):
 
 
 if __name__ == "__main__":
-    # python understudy.py C-small-practice
+    # python word.py C-small-practice
     WordSolver(sys.argv[1])()

@@ -12,7 +12,7 @@ class SolverBase:
         self.n_sample_ = 0
 
     def _get_file_handler(self, ext):
-        op = 'r' if ext == 'in' else 'w'
+        op = 'w' if ext == 'out' else 'r'
         return file(path.join(self.data_dir, self.name + "." + ext), op)
 
     def _get_input_file(self):
