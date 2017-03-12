@@ -5,8 +5,7 @@ import numpy as np
 import pandas as pd
 
 import dm_common
-import struct
-import util
+from . import struct, util
 
 
 class BaggingClassifier(dm_common.StringMixin):

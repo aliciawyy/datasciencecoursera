@@ -6,9 +6,7 @@ import pandas as pd
 import numpy as np
 
 import dm_common
-import struct
-import util
-import operator
+from . import util, operator
 
 
 def fit_id3(x, y, criterion="entropy"):

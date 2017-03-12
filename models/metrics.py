@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import confusion_matrix, matthews_corrcoef
+from sklearn.metrics import matthews_corrcoef
 
 
 def sigmoid(x):
