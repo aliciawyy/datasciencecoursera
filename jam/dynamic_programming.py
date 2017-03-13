@@ -5,9 +5,8 @@ get_flower_order
 
 
 def get_flower_order(height, bloom, wilt):
-    flowers = zip(height, bloom, wilt)
     # Sort the flowers to make the height in ascending order
-    flowers.sort()
+    flowers = sorted(zip(height, bloom, wilt))
 
     def is_overlap(f1, f2):
         # There is overlap when start1 <= end2 and start2 <= end1
