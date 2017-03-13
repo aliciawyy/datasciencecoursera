@@ -1,14 +1,15 @@
 from os import path, mkdir
 
+import data
+
 
 class SolverBase(object):
-    all_data_dir = path.join(path.dirname(__file__), "..", "data")
 
     def __init__(self, name):
         self.name = name
         class_name = self.__class__.__name__
         ind = class_name.find("Solver")
-        self.data_dir = path.join(self.all_data_dir, class_name[:ind].lower())
+        self.data_dir = path.join(data.DATA_PATH, class_name[:ind].lower())
         if not path.exists(self.data_dir):
             mkdir(self.data_dir)
             if self.name == "sample":
