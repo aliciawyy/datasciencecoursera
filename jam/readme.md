@@ -10,6 +10,7 @@ This repository contains my solutions of some puzzles found on the Internet.
 
 #### DP
 - Flower Garden (2004 TCCC Round 1)
+- ZigZag (2003 TCCC Semifinals 3)
 
 ## In progress
 - Word Search (Code Jam to I/O 2017 for Women)
