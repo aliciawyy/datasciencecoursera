@@ -48,9 +48,9 @@ def tweets_for(topics):
 
     return Observable.create(observe_tweets).share()
 
-topics = ["SP500", "Trump"]
+topics0 = ["SP500", "Trump"]
 
-disposable = tweets_for(topics).map(lambda d: json.loads(d)) \
+disposable = tweets_for(topics0).map(lambda d: json.loads(d)) \
     .filter(lambda m: "text" in m) \
     .map(lambda m: m["text"].strip()) \
     .subscribe(pprint.pprint)
