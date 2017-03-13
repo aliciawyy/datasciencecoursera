@@ -27,7 +27,7 @@ class TicketSolver(SolverBase):
         return data_input
 
 
-class TicketTrouble:
+class TicketTrouble(object):
     def __init__(self, n_grid, tickets):
         self.n_grid = n_grid
         self.tickets = tickets

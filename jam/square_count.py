@@ -15,7 +15,7 @@ class SquareCountSolver(SolverBase):
         self._write_result(result)
 
 
-class DotGrid:
+class DotGrid(object):
     threshold = 1000000007
 
     def __init__(self, n_dots, n_col):

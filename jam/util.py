@@ -1,6 +1,7 @@
 from os import path, mkdir
 
-import data
+from data import DATA_PATH
+# DATA_PATH = "."
 
 
 class SolverBase(object):
@@ -9,7 +10,7 @@ class SolverBase(object):
         self.name = name
         class_name = self.__class__.__name__
         ind = class_name.find("Solver")
-        self.data_dir = path.join(data.DATA_PATH, class_name[:ind].lower())
+        self.data_dir = path.join(DATA_PATH, class_name[:ind].lower())
         if not path.exists(self.data_dir):
             mkdir(self.data_dir)
             if self.name == "sample":

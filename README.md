@@ -9,4 +9,4 @@ dmining
 [![Python35](https://img.shields.io/badge/python-3.5-blue.svg)](https://travis-ci.org/aliciawyy/dmining)
 
 
-some tools and algorithms for machine learning
+some tools for machine learning and algorithms
