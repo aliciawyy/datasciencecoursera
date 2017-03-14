@@ -1,5 +1,4 @@
-Jam
-====
+# Puzzle
 
 This repository contains my solutions of some puzzles found on the Internet.
 
@@ -14,5 +13,6 @@ This repository contains my solutions of some puzzles found on the Internet.
 - BadNeighbors (2004 TCCC Round 4)
 
 ## In progress
+- ChessMetric (2003 TCCC Round 4)
 - Word Search (Code Jam to I/O 2017 for Women)
 - Patterns Overlap (Kickstart Round A 2017)
