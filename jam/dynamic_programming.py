@@ -4,7 +4,11 @@ get_flower_order
 
 - https://community.topcoder.com/stat?c=problem_statement&pm=1259&rd=4493
 longest_zig_zag
+
+- https://community.topcoder.com/stat?c=problem_statement&pm=2402&rd=5009
+max_donation_from_neighbors
 """
+import numpy as np
 
 
 def get_flower_order(height, bloom, wilt):
@@ -26,9 +30,10 @@ def get_flower_order(height, bloom, wilt):
     return result
 
 
-def longest_zig_zag_dp(seq):
+def longest_zig_zag(seq):
     """
     The complexity is n2 with DP.
+    Auxiliary Space is n.
     """
     def to_sign(first, second):
         if first < second:
@@ -47,6 +52,8 @@ def longest_zig_zag_dp(seq):
     longest_len[1] = 2
     last_diff_sign = [-1] * n
     last_diff_sign[1] = to_sign(seq[0], seq[1])
+
+    max_longest_len = 2
     for i, item in enumerate(seq[2:], 2):
         max_len = 0
         for j in range(i):
@@ -56,17 +63,32 @@ def longest_zig_zag_dp(seq):
                     max_len = longest_len[j] + 1
                     last_diff_sign[i] = current_sign
         longest_len[i] = max_len
-    return max(longest_len)
+        max_longest_len = max(max_longest_len, max_len)
+    return max_longest_len
 
 
-def longest_zig_zag_flat(seq):
-    """
-    There should be a better way to count the longest zigzag.
-    """
-    pass
+def max_donation_from_neighbors(donations):
+    # init
+    dons = np.array(donations, dtype=np.int16)
+    dons = np.roll(dons, -np.argmax(dons))
 
+    first_element_in = [True] * len(dons)
+    first_element_in[1] = False
+    max_list = list(dons)
 
+    max_donation = max_list[0]
+    for i, donation_i in enumerate(dons[2:-1], 2):
+        max_i = max_list[0] + donation_i
+        for j in range(1, i - 1):
+            max_j = max_list[j] + donation_i
+            if max_j > max_i:
+                max_i = max_j
+                first_element_in[i] = first_element_in[j]
+        max_list[i] = max_i
+        max_donation = max(max_donation, max_i)
 
-
-
-
+    last_donation = dons[-1]
+    for i, don_i in enumerate(dons[1:-2]):
+        if not first_element_in[i]:
+            max_donation = max(max_donation, last_donation + don_i)
+    return max_donation

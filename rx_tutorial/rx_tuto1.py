@@ -50,7 +50,7 @@ letters.subscribe(MySubscriber())
 letters.subscribe(on_next=pprint.pprint,
                   on_completed=lambda: pprint.pprint("Done."))
 
-mapped = letters.map(lambda s: len(s))
+mapped = letters.map(len)
 
 filtered = mapped.filter(lambda i: i >= 5)
 

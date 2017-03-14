@@ -8,9 +8,10 @@ This repository contains my solutions of some puzzles found on the Internet.
 - Understudies (Code Jam to I/O 2017 for Women)
 - Square Counting (Kickstart Round A 2017)
 
-#### DP
+### DP
 - Flower Garden (2004 TCCC Round 1)
 - ZigZag (2003 TCCC Semifinals 3)
+- BadNeighbors (2004 TCCC Round 4)
 
 ## In progress
 - Word Search (Code Jam to I/O 2017 for Women)
