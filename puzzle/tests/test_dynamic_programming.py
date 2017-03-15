@@ -74,3 +74,28 @@ class DPTest(TestCase):
     )
     def test_max_donation_from_neighbors(self, donations, expected):
         self.assertEqual(dp.max_donation_from_neighbors(donations), expected)
+
+
+class ChessMetricTest(TestCase):
+    def setUp(self):
+        self.chess = dp.ChessMetric()
+
+    def test_possible_pos_change(self):
+        self.assertEqual(len(self.chess.possible_pos_change), 16)
+
+    def test_get_next_position(self):
+        pos = [3, 3]
+        board_size = 5
+        result = self.chess.get_next_position(pos, board_size)
+        self.assertEqual(len(result), 12)
+
+    @parameterized.expand(
+        [(100, [0, 0], [0, 99], 50, 243097320072600),  # 29 sec
+         (5, [0, 0], [0, 0], 2, 5),
+         (3, [0, 0], [2, 2], 1, 0),
+         (3, [0, 0], [1, 0], 1, 1), (3, [0, 0], [1, 2], 1, 1)
+         ]
+    )
+    def test_how_many_paths(self, board_size, start, end, num_moves, expected):
+        result = self.chess.how_many_paths(board_size, start, end, num_moves)
+        self.assertEqual(result, expected)

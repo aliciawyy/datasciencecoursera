@@ -59,5 +59,5 @@ def _all_star(x):
 
 
 if __name__ == "__main__":
-    # python -m jam.pattern_overlap sample
+    # python -m puzzle.pattern_overlap sample
     PatternOverlapSolver(sys.argv[1])()

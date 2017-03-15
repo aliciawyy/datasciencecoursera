@@ -50,5 +50,5 @@ class IOGenerator(object):
 
 
 if __name__ == "__main__":
-    # python -m jam.word C-small-practice
+    # python -m puzzle.word C-small-practice
     WordSolver(sys.argv[1])()
