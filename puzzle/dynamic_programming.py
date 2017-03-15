@@ -13,7 +13,6 @@ max_donation_from_neighbors
 
 
 """
-import collections
 import numpy as np
 
 
@@ -100,10 +99,6 @@ def max_donation_from_neighbors(donations):
     return max_donation
 
 
-def _on_board(x_col, board_size):
-    return (x_col >= 0) & (x_col < board_size)
-
-
 class ChessMetric(object):
     def __init__(self):
         x_change = [[i, j] for i in range(-1, 2)
@@ -117,22 +112,25 @@ class ChessMetric(object):
         )
 
     def get_next_position(self, pos, board_size):
+        def _on_board(x_col):
+            return (x_col >= 0) & (x_col < board_size)
+
         previous_pos = np.add(self.possible_pos_change, pos)
-        pos_on_board = _on_board(previous_pos[:, 0], board_size) & \
-            _on_board(previous_pos[:, 1], board_size)
+        pos_on_board = _on_board(previous_pos[:, 0]) & \
+            _on_board(previous_pos[:, 1])
         return previous_pos[pos_on_board]
 
     def how_many_paths(self, board_size, start, end, num_moves):
         # num_moves will be between 1 and 50 inclusive
         num_paths = np.zeros((board_size, board_size), dtype=np.int64)
-        pos_list = [start]
+        pos_list = {tuple(start): 1}
         for i in range(0, num_moves):
             new_pos_list = set()
-            for pos in pos_list:
+            for pos, pos_path in pos_list.items():
                 next_pos = self.get_next_position(pos, board_size)
-                cnt = 1 if i == 0 else num_paths[pos]
-                num_paths[zip(*next_pos)] += cnt
+                num_paths[zip(*next_pos)] += pos_path
                 new_pos_list = new_pos_list.union(map(tuple, next_pos))
-            pos_list = new_pos_list
+            new_pos_list = list(new_pos_list)
+            pos_list = dict(zip(new_pos_list, num_paths[zip(*new_pos_list)]))
         return num_paths[end[0], end[1]]
 
