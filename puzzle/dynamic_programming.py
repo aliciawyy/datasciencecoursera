@@ -123,15 +123,15 @@ class ChessMetric(object):
     def how_many_paths(self, board_size, start, end, num_moves):
         # num_moves will be between 1 and 50 inclusive
         num_paths = np.zeros((board_size, board_size), dtype=np.int64)
-        pos_list = {tuple(start): 1}
+        pos_dct = {tuple(start): 1}
         for i in range(0, num_moves):
-            new_pos_list = set()
-            for pos, pos_path in pos_list.items():
+            new_pos_set = set()
+            for pos, pos_num_path in pos_dct.items():
                 next_pos = self.get_next_position(pos, board_size)
-                num_paths[list(zip(*next_pos))] += pos_path
-                new_pos_list = new_pos_list.union(map(tuple, next_pos))
-            new_pos_list = list(new_pos_list)
-            pos_list = dict(zip(new_pos_list,
-                                num_paths[list(zip(*new_pos_list))]))
+                num_paths[list(zip(*next_pos))] += pos_num_path
+                new_pos_set = new_pos_set.union(map(tuple, next_pos))
+            new_pos_set = list(new_pos_set)
+            pos_dct = dict(
+                zip(new_pos_set, num_paths[list(zip(*new_pos_set))])
+            )
         return num_paths[end[0], end[1]]
-
