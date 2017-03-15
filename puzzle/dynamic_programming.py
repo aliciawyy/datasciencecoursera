@@ -128,9 +128,10 @@ class ChessMetric(object):
             new_pos_list = set()
             for pos, pos_path in pos_list.items():
                 next_pos = self.get_next_position(pos, board_size)
-                num_paths[zip(*next_pos)] += pos_path
+                num_paths[list(zip(*next_pos))] += pos_path
                 new_pos_list = new_pos_list.union(map(tuple, next_pos))
             new_pos_list = list(new_pos_list)
-            pos_list = dict(zip(new_pos_list, num_paths[zip(*new_pos_list)]))
+            pos_list = dict(zip(new_pos_list,
+                                num_paths[list(zip(*new_pos_list))]))
         return num_paths[end[0], end[1]]
 

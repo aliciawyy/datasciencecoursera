@@ -37,5 +37,5 @@ class DotGrid(object):
 
 if __name__ == "__main__":
     import sys
-    # python -m jam.square_count A-large-practice
+    # python -m puzzle.square_count A-large-practice
     SquareCountSolver(sys.argv[1])()

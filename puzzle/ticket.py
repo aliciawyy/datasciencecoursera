@@ -48,5 +48,5 @@ class TicketTrouble(object):
 
 
 if __name__ == '__main__':
-    # python -m jam.ticket A-large-practice
+    # python -m puzzle.ticket A-large-practice
     TicketSolver(sys.argv[1])()
