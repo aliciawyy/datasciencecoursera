@@ -83,10 +83,10 @@ class ChessMetricTest(TestCase):
     def test_possible_pos_change(self):
         self.assertEqual(len(self.chess.possible_pos_change), 16)
 
-    def test_get_next_position(self):
+    def test_get_next_positions(self):
         pos = [3, 3]
         board_size = 5
-        result = self.chess.get_next_position(pos, board_size)
+        result = self.chess.get_next_positions(pos, board_size)
         self.assertEqual(len(result), 12)
 
     @parameterized.expand(

@@ -149,9 +149,9 @@ class AvoidRoads(object):
         selection = (next_pos[:, 0] < self.width_) & \
                     (next_pos[:, 1] < self.height_)
         next_pos = next_pos[selection]
+        next_pos = list(map(tuple, next_pos))
         bad_pos = self.bad_.get(pos, None)
         if bad_pos is not None:
-            next_pos = list(map(tuple, next_pos))
             next_pos.remove(bad_pos)
         return next_pos
 
@@ -159,10 +159,13 @@ class AvoidRoads(object):
         bad = [list(map(int, p.split(" "))) for p in bad]
         self.bad_ = dict(sorted([tuple(p[:2]), tuple(p[2:])]) for p in bad)
 
+    def set_dimension(self, w, h):
+        self.width_ = w + 1
+        self.height_ = h + 1
+
     def num_ways(self, width, height, bad):
         self.set_bad(bad)
-        self.width_ = width + 1
-        self.height_ = height + 1
+        self.set_dimension(width, height)
         num_paths = np.zeros((self.width_, self.height_), dtype=np.int64)
         pos_dct = {(0, 0): 1}
         n = self.width_ + self.height_
@@ -171,7 +174,7 @@ class AvoidRoads(object):
             for pos, pos_num_path in pos_dct.items():
                 next_pos = self.get_next_positions(pos)
                 num_paths[list(zip(*next_pos))] += pos_num_path
-                new_pos_set = new_pos_set.union(map(tuple, next_pos))
+                new_pos_set = new_pos_set.union(next_pos)
             new_pos_set = list(new_pos_set)
             pos_dct = dict(
                 zip(new_pos_set, num_paths[list(zip(*new_pos_set))])
