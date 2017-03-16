@@ -16,6 +16,9 @@ This repository contains my solutions of some puzzles found on the Internet.
 - ChessMetric (2003 TCCC Round 4)
 - AvoidRoads (2003 TCO Semifinals 4)
 
+### Shortest Path
+- Jewelry (2003 TCO Online Round 4)
+
 ## In progress
 
 - Word Search (Code Jam to I/O 2017 for Women)

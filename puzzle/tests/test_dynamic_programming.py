@@ -119,6 +119,5 @@ class AvoidRoadsTest(TestCase):
     def test_sort_bad(self):
         self.avoid_r.set_bad(["0 0 0 1", "6 6 5 6"])
         self.assertDictEqual(
-            self.avoid_r.bad_,
-            {(0, 0): (0, 1), (5, 6): (6, 6)}
+            self.avoid_r.bad_, {(0, 0): (0, 1), (5, 6): (6, 6)}
         )
