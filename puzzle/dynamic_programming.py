@@ -111,7 +111,7 @@ class ChessMetric(object):
             (x_change, l_change_h, l_change_v)
         )
 
-    def get_next_position(self, pos, board_size):
+    def get_next_positions(self, pos, board_size):
         def _on_board(x_col):
             return (x_col >= 0) & (x_col < board_size)
 
@@ -124,10 +124,10 @@ class ChessMetric(object):
         # num_moves will be between 1 and 50 inclusive
         num_paths = np.zeros((board_size, board_size), dtype=np.int64)
         pos_dct = {tuple(start): 1}
-        for i in range(0, num_moves):
+        for i in range(num_moves):
             new_pos_set = set()
             for pos, pos_num_path in pos_dct.items():
-                next_pos = self.get_next_position(pos, board_size)
+                next_pos = self.get_next_positions(pos, board_size)
                 num_paths[list(zip(*next_pos))] += pos_num_path
                 new_pos_set = new_pos_set.union(map(tuple, next_pos))
             new_pos_set = list(new_pos_set)
@@ -135,3 +135,45 @@ class ChessMetric(object):
                 zip(new_pos_set, num_paths[list(zip(*new_pos_set))])
             )
         return num_paths[end[0], end[1]]
+
+
+class AvoidRoads(object):
+    def __init__(self):
+        self.possible_moves = np.array([[1, 0], [0, 1]], dtype=np.int8)
+        self.bad_ = None
+        self.width_ = 0
+        self.height_ = 0
+
+    def get_next_positions(self, pos):
+        next_pos = self.possible_moves + pos
+        selection = (next_pos[:, 0] < self.width_) & \
+                    (next_pos[:, 1] < self.height_)
+        next_pos = next_pos[selection]
+        bad_pos = self.bad_.get(pos, None)
+        if bad_pos is not None:
+            next_pos = list(map(tuple, next_pos))
+            next_pos.remove(bad_pos)
+        return next_pos
+
+    def set_bad(self, bad):
+        bad = [list(map(int, p.split(" "))) for p in bad]
+        self.bad_ = dict(sorted([tuple(p[:2]), tuple(p[2:])]) for p in bad)
+
+    def num_ways(self, width, height, bad):
+        self.set_bad(bad)
+        self.width_ = width + 1
+        self.height_ = height + 1
+        num_paths = np.zeros((self.width_, self.height_), dtype=np.int64)
+        pos_dct = {(0, 0): 1}
+        n = self.width_ + self.height_
+        for i in range(n):
+            new_pos_set = set()
+            for pos, pos_num_path in pos_dct.items():
+                next_pos = self.get_next_positions(pos)
+                num_paths[list(zip(*next_pos))] += pos_num_path
+                new_pos_set = new_pos_set.union(map(tuple, next_pos))
+            new_pos_set = list(new_pos_set)
+            pos_dct = dict(
+                zip(new_pos_set, num_paths[list(zip(*new_pos_set))])
+            )
+        return num_paths[-1, -1]

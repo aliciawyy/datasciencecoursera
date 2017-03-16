@@ -99,3 +99,26 @@ class ChessMetricTest(TestCase):
     def test_how_many_paths(self, board_size, start, end, num_moves, expected):
         result = self.chess.how_many_paths(board_size, start, end, num_moves)
         self.assertEqual(result, expected)
+
+
+class AvoidRoadsTest(TestCase):
+    def setUp(self):
+        self.avoid_r = dp.AvoidRoads()
+
+    @parameterized.expand(
+        [(6, 6, ["0 0 0 1", "6 6 5 6"], 252),
+         (2, 2, ["0 0 1 0", "1 2 2 2", "1 1 2 1"], 0),
+         (1, 1, [], 2),
+         (31, 35, [], 6406484391866534976)
+         ]
+    )
+    def test_num_ways(self, w, h, bad, expected):
+        result = self.avoid_r.num_ways(w, h, bad)
+        self.assertEqual(result, expected)
+
+    def test_sort_bad(self):
+        self.avoid_r.set_bad(["0 0 0 1", "6 6 5 6"])
+        self.assertDictEqual(
+            self.avoid_r.bad_,
+            {(0, 0): (0, 1), (5, 6): (6, 6)}
+        )

@@ -14,6 +14,7 @@ This repository contains my solutions of some puzzles found on the Internet.
 - ZigZag (2003 TCCC Semifinals 3)
 - BadNeighbors (2004 TCCC Round 4)
 - ChessMetric (2003 TCCC Round 4)
+- AvoidRoads (2003 TCO Semifinals 4)
 
 ## In progress
 
