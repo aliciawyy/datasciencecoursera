@@ -15,9 +15,9 @@ This repository contains my solutions of some puzzles found on the Internet.
 - BadNeighbors (2004 TCCC Round 4)
 - ChessMetric (2003 TCCC Round 4)
 - AvoidRoads (2003 TCO Semifinals 4)
-
-### Shortest Path
 - Jewelry (2003 TCO Online Round 4)
+- StripePainter (SRM 150 Div 1)
+
 
 ## In progress
 

@@ -27,9 +27,7 @@ def make_sum(dct_values, base=None):
 
 class Jewelry(object):
     def __init__(self):
-        self.base = [0, 1]
         self.values_ = None
-        self.aux_ = {}
 
         self.ways_below_ = collections.defaultdict(int)
         self.ways_below_[0] = 1
