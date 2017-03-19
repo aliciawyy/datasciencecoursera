@@ -9,10 +9,8 @@ class StripePainterTest(TestCase):
         self.painter = sp.StripePainter()
 
     @parameterized.expand(
-        [("BRGBGR", 4),
-         ("BECBBDDEEBABDCADEAAEABCACBDBEECDEDEACACCBEDABEDADD", 26),
-         ("RGBGR", 3), ("RGRG", 3),
-         ("ABACADA", 4),
+        [("BECBBDDEEBABDCADEAAEABCACBDBEECDEDEACACCBEDABEDADD", 26),
+         ("RGBGR", 3), ("RGRG", 3), ("ABACADA", 4), ("BRGBGR", 4),
          ("AABBCCDDCCBBAABBCCDD", 7)]
     )
     def test_min_strokes(self, stripes, expected):

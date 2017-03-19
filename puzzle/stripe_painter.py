@@ -40,10 +40,3 @@ class StripePainter(object):
                 n_strokes[i, j] = min_strokes
 
         return n_strokes[0, n - 1]
-
-
-def is_symmetric(stripes):
-    for i in range(int(len(stripes) / 2)):
-        if stripes[i] != stripes[-1 - i]:
-            return False
-    return True
