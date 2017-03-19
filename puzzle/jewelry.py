@@ -1,6 +1,27 @@
-import itertools
 import collections
+from scipy.special import comb
 import numpy as np
+
+
+def _iter_sorted_dct(dct):
+    for k in sorted(dct.keys()):
+        yield k, dct[k]
+
+
+def make_sum(dct_values, base=None):
+    sum_cnt = collections.defaultdict(int)
+    if base is not None:
+        sum_cnt.update(base)
+    for v, n in _iter_sorted_dct(dct_values):
+        # to include from 1 to n elements of value v
+        dct = dict(sum_cnt)
+        for i in range(1, n + 1):
+            n_ways = comb(n, i)
+            increment = i * v  # increment for sum by including n times v
+            sum_cnt[increment] += n_ways
+            for k, v_orig in _iter_sorted_dct(dct):
+                sum_cnt[k + increment] += n_ways * v_orig
+    return sum_cnt
 
 
 class Jewelry(object):
@@ -9,40 +30,47 @@ class Jewelry(object):
         self.values_ = None
         self.aux_ = {}
 
+        self.ways_below_ = collections.defaultdict(int)
+        self.ways_below_[0] = 1
+
     def __repr__(self):
         return repr(self.values_)
 
     def set_values(self, v):
-        self.values_ = sorted(v)
-
-    def get_auxiliary_vector(self, n):
-        if n not in self.aux_:
-            self.aux_[n] = np.array(
-                list(itertools.product(self.base, repeat=n)), dtype=np.uint32
-            )
-        return self.aux_[n]
-
-    def make_sum(self, v, last_element=0):
-        aux = self.get_auxiliary_vector(len(v))
-        v_sum = np.dot(aux, v) + last_element
-        return collections.Counter(v_sum)
+        self.values_ = collections.Counter(v)
 
     def how_many(self, values):
         self.set_values(values)
         count = 0
-        num_ways = 0
-        for i, bob_last_jewelry in enumerate(self.values_[:-1]):
-            # When i is the largest element for Bob
-            bob = self.make_sum(self.values_[:i], bob_last_jewelry)
-            frank = self.make_sum(self.values_[i + 1:])
-            intersection = set(bob.keys()).intersection(frank.keys())
-            num_ways = np.sum([frank[s] * bob[s] for s in intersection],
-                              dtype=np.uint64)
-            count += num_ways
-        # if the last value is the same as the second to last, it is possible
-        # to give it to Bob
-        if self.values_[-1] == self.values_[-2]:
-            count += num_ways
+        values_for_above = dict(self.values_)
+
+        for v, cnt in _iter_sorted_dct(self.values_):
+            values_for_above.pop(v)
+            ways_above_exclude_v = make_sum(values_for_above)
+            ways_below_exclude_v = dict(self.ways_below_)
+            for i in range(1, cnt + 1):
+                n_ways = comb(cnt, i)
+                ways_below = collections.defaultdict(int)
+                for k, v_orig in _iter_sorted_dct(ways_below_exclude_v):
+                    sum_with_iv = k + v * i
+                    increment = n_ways * v_orig
+                    ways_below[sum_with_iv] += increment
+                    self.ways_below_[sum_with_iv] += increment
+                # The ways above can include n - i elements in maximum
+                m = cnt - i
+                # Count the possible sum from elements above exclude v and
+                # with from 1 to n - i elements of v
+                ways_above = collections.defaultdict(int)
+                ways_above.update(ways_above_exclude_v)
+                for j in range(1, m + 1):
+                    n_ways = comb(m, j)
+                    value_increment = v * j
+                    ways_above[value_increment] += n_ways
+                    for k, v_orig in _iter_sorted_dct(ways_above_exclude_v):
+                        ways_above[k + value_increment] += n_ways * v_orig
+                intersection = set(ways_below).intersection(ways_above)
+                count += np.sum([ways_below[k] * ways_above[k]
+                                 for k in intersection])
         return count
 
 
