@@ -17,6 +17,8 @@ This repository contains my solutions of some puzzles found on the Internet.
 - AvoidRoads (2003 TCO Semifinals 4)
 - Jewelry (2003 TCO Online Round 4)
 - StripePainter (SRM 150 Div 1)
+- QuickSums (SRM 197 Div 2)
+- ShortPalindromes (SRM 165 Div 2)
 
 
 ## In progress
