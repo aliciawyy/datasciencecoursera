@@ -13,7 +13,7 @@ def longest_common_sub_sequence(a, b):
         if lengths are the same, return the lexicographically earliest
         """
         if len(x) == len(y):
-            return '' if x == '' else min(x, y)
+            return min(x, y)
         return max(x, y, key=len)
 
     n_a = len(a)
@@ -51,6 +51,9 @@ def sort_merge_string(x, y):
 def shortest_common_super_sequence(a, b):
     """
     get the shortest common string for a and b
+
+    This cannot solve complex case like the one in the test case, when same
+    char repeats before the next common substring letter.
     """
     def separate_by_char(letter, seq):
         idx_seq = seq.find(letter)
@@ -65,23 +68,29 @@ def shortest_common_super_sequence(a, b):
     return result
 
 
-class ShortPalindromes(object):
-    def __init__(self):
-        self.base_ = None
+def is_palindrome(s):
+    n_s = len(s)
+    if n_s % 2 == 1:
+        middle = int((n_s - 1) / 2)
+        return s[:middle] == s[:middle:-1]
+    return False
 
-    def set_base(self, base):
-        self.base_ = base
 
-    def shortest(self, base):
-        self.set_base(base)
-        min_seq = self.base_ + self.base_
-        for i, ch in enumerate(self.base_):
-            # get the result if putting ch in the middle
-            seq = shortest_common_super_sequence(self.base_[:i],
-                                                 self.base_[:i:-1])
-            palindrome = seq + ch + seq[::-1]
-            if len(palindrome) < len(min_seq):
-                min_seq = palindrome
-            elif len(palindrome) == len(min_seq) and palindrome < min_seq:
-                min_seq = palindrome
-        return min_seq
+def get_min_palindrome(a, b):
+    if len(a) == len(b):
+        return min(a, b)
+    else:
+        return min(a, b, key=len)
+
+
+def shortest_palindromes(base):
+    if len(base) <= 1:
+        return base
+    if is_palindrome(base):
+        return base
+    if base[0] == base[-1]:
+        return base[0] + shortest_palindromes(base[1:-1]) + base[0]
+    else:
+        palindrome0 = base[0] + shortest_palindromes(base[1:]) + base[0]
+        palindrome1 = base[-1] + shortest_palindromes(base[:-1]) + base[-1]
+        return get_min_palindrome(palindrome0, palindrome1)

@@ -5,24 +5,23 @@ from .. import palindrome as pl
 
 
 class ShortPalindromesTest(TestCase):
-    def setUp(self):
-        self.short_pl = pl.ShortPalindromes()
 
-    """
     @parameterized.expand(
-        [#("RACE", "ECARACE"), ("TOPCODER", "REDTOCPCOTDER"), ("Q", "Q"),
-         #("MADAMIMADAM", "MADAMIMADAM"),
+        [("RACE", "ECARACE"), ("TOPCODER", "REDTOCPCOTDER"), ("Q", "Q"),
+         ("MADAMIMADAM", "MADAMIMADAM"),
          ("ALRCAGOEUAOEURGCOEUOOIGFA",
-          "AFLRCAGIOEOUAEOCEGRURGECOEAUOEOIGACRLFA")]
+          "AFLRCAGIOEOUAEOCEGRURGECOEAUOEOIGACRLFA")
+         ]
     )
     def test_shortest(self, base, expected):
-        self.assertEqual(self.short_pl.shortest(base), expected)
-"""
+        self.assertEqual(pl.shortest_palindromes(base), expected)
+
     @parameterized.expand(
-        [('ALRCAGOEUAOE', 'AFGIOOUEOCGR', 'AFLRCAGIOEOUAEOCEGR'),
-         ('ECA', '', 'ECA'),
+        [('ECA', '', 'ECA'),
          ("BCX", "DCYX", "BDCYX"),
-         ('AGGTAB', 'GXTXAYB', 'AGGXTXAYB')]
+         ('AGGTAB', 'GXTXAYB', 'AGGXTXAYB'),
+         # ('ALRCAGOEUAOE', 'AFGIOOUEOCGR', 'AFLRCAGIOEOUAEOCEGR'),
+         ]
     )
     def test_shortest_common_super_sequence(self, a, b, expected):
         self.assertEqual(pl.shortest_common_super_sequence(a, b), expected)
@@ -33,3 +32,9 @@ class ShortPalindromesTest(TestCase):
     )
     def test_longest_common_sub_sequence(self, a, b, expected):
         self.assertEqual(pl.longest_common_sub_sequence(a, b), expected)
+
+    @parameterized.expand(
+        [("ADH", False), ("AFDFDFA", True), ("ARRA", False), ("Q", True)]
+    )
+    def test_is_palindrome(self, s, expected):
+        self.assertEqual(pl.is_palindrome(s), expected)
