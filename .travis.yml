@@ -7,7 +7,7 @@ python:
 install:
   - pip install -U pip
   - pip install -r requirements.txt
-  - pip install coveralls
+  - pip install codecov
 
 script:
   - export PYTHONPATH=$PWD/aliciawyy/dmining:$PYTHONPATH
@@ -16,5 +16,4 @@ script:
  # Coverage report
 after_success:
   - codecov
-  - coveralls
 
