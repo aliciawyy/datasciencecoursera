@@ -1,4 +1,4 @@
-from nose_parameterized import parameterized
+from parameterized import parameterized
 from numpy.testing import TestCase
 from .. import util
 
