@@ -7,7 +7,7 @@ python:
 install:
   - pip install -U pip
   - pip install -r requirements.txt
-  - pip install codecov
+  - pip install codecov codacy-coverage
 
 script:
   - export PYTHONPATH=$PWD/aliciawyy/dmining:$PYTHONPATH
@@ -16,4 +16,6 @@ script:
  # Coverage report
 after_success:
   - codecov
+  - export CODACY_PROJECT_TOKEN=632c1d834d504afbb0c0507d5ea906ad
+  - python-codacy-coverage -r coverage.xml
 
