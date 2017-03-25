@@ -19,5 +19,5 @@ after_success:
   - export CODACY_PROJECT_TOKEN=632c1d834d504afbb0c0507d5ea906ad
   - python-codacy-coverage -r coverage.xml
   - export CODECLIMATE_REPO_TOKEN=4c103831dc6ddebf49bf093232c701358f31bad931c145cd18189878e847a4fc
-  - codeclimate-test-reporter --token
+  - codeclimate-test-reporter
 
