@@ -7,15 +7,17 @@ python:
 install:
   - pip install -U pip
   - pip install -r requirements.txt
-  - pip install codecov codacy-coverage
+  - pip install codecov codacy-coverage codeclimate-test-reporter
 
 script:
   - export PYTHONPATH=$PWD/aliciawyy/dmining:$PYTHONPATH
-  - nosetests . --with-coverage --cover-package=. --cover-html --cover-erase -v
+  - nosetests . --with-coverage --cover-package=. --cover-html --cover-erase
 
  # Coverage report
 after_success:
   - codecov
   - export CODACY_PROJECT_TOKEN=632c1d834d504afbb0c0507d5ea906ad
   - python-codacy-coverage -r coverage.xml
+  - export CODECLIMATE_REPO_TOKEN=4c103831dc6ddebf49bf093232c701358f31bad931c145cd18189878e847a4fc
+  - codeclimate-test-reporter --token
 
