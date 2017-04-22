@@ -15,40 +15,36 @@ class TripPlanner(object):
         self.budget = budget
         self.price_per_day = price_per_day
         self.num_attractions = num_attr
-        self.attractions = [(score, -visit_time, -cost)
-                            for cost, visit_time, score in attractions]
-        self.attractions = sorted(self.attractions)
-        for i in self.attractions:
-            print i
+        self.attractions = attractions
 
     def max_score_sum(self):
-        return self.knapsack(self.budget, 0, 0, self.num_attractions)
+        max_sum = collections.defaultdict(int)
+        max_sum[(self.budget, 0)] = 0
 
-    def knapsack(self, budget, time_cnt, day_cnt, n):
-        if n == 0 or budget == 0:
-            return 0
+        max_sum_of_all = 0
+        for cost, visit_time, score in self.attractions:
+            new_max_sum = {}
+            # print "\n", max_sum
+            for (budget, time_cnt), score_sum in max_sum.items():
+                day_cnt, past_time = divmod(time_cnt, self.hours_per_day)
+                remaining_time = self.hours_per_day - past_time
+                remaining_budget = budget - cost
+                new_time_cnt = time_cnt + visit_time
+                if visit_time > remaining_time:
+                    remaining_budget -= self.price_per_day
+                    new_time_cnt += remaining_time
+                elif past_time == 0:
+                    remaining_budget -= self.price_per_day
 
-        info = self.attractions[n - 1]
-        score, visit_time, cost = info[0], -info[1], -info[2]
-        pass_night = int(time_cnt + visit_time / self.hours_per_day) > day_cnt
-        if pass_night:
-            cost += self.price_per_day
-            add_additional_day = 1
-        else:
-            add_additional_day = 0
+                if remaining_budget < 0:
+                    continue
+                new_key = (remaining_budget, time_cnt + visit_time)
+                this_max_sum = max(max_sum[new_key], score_sum + score)
+                new_max_sum[new_key] = this_max_sum
+                max_sum_of_all = max(max_sum_of_all, this_max_sum)
+            max_sum.update(new_max_sum)
+        return max_sum_of_all
 
-        # Check if we can include the n-th attraction
-        score_if_not = self.knapsack(budget, time_cnt, day_cnt, n - 1)
-
-        if budget < cost:
-            return score_if_not
-        else:
-            score_if_visit_current = score + self.knapsack(
-                budget - cost, time_cnt + visit_time,
-                day_cnt + add_additional_day,
-                n - 1
-            )
-            return max(score_if_visit_current, score_if_not)
 
 B, P, N = read_line_to_list()
 ATTR = [map(int, read_line_to_list(None)[1:]) for _ in range(N)]
