@@ -15,14 +15,15 @@ class TripPlanner(object):
         self.budget = budget
         self.price_per_day = price_per_day
         self.num_attractions = num_attr
-        self.attractions = attractions
+        self.attractions = [(v, c, s) for c, v, s in attractions]
+        self.attractions = sorted(self.attractions)
 
     def max_score_sum(self):
         max_sum = collections.defaultdict(int)
         max_sum[(self.budget, 0)] = 0
 
         max_sum_of_all = 0
-        for cost, visit_time, score in self.attractions:
+        for visit_time, cost, score in self.attractions:
             new_max_sum = {}
             # print "\n", max_sum
             for (budget, time_cnt), score_sum in max_sum.items():
