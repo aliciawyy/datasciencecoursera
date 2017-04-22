@@ -19,32 +19,38 @@ class CollectCandies(object):
         self.v_grid_ = {(0, 0): self.candies[0][0]}
 
         self.new_pos_from_previous_ = defaultdict(set)
-        self.pos_checked_ = set()
+        self.pos_unchecked_ = {(i, j) for i in range(self.dim[0])
+                               for j in range(self.dim[1])}
 
-    def _is_in_range(self, point):
-        return 0 <= point[0] < self.dim[0] and 0 <= point[1] < self.dim[1]
+    def _in_range_x(self, point):
+        return 0 <= point[0] < self.dim[0]
+
+    def _in_range_y(self, point):
+        return 0 <= point[1] < self.dim[1]
 
     def append_previous_pos_(self, point):
-        self.pos_checked_.add(point)
+        def _add(p1):
+            self.new_pos_from_previous_[p1].add(point)
+
+        self.pos_unchecked_.remove(point)
         x, y = point[0], point[1]
-        next_pos = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
-        for p in filter(self._is_in_range, next_pos):
-            self.new_pos_from_previous_[p].add(point)
-        self.new_pos_from_previous_[point].add(point)
+        map(_add, filter(self._in_range_x, [(x - 1, y), (x + 1, y)]))
+        map(_add, filter(self._in_range_y, [(x, y - 1), (x, y + 1)]))
+        _add(point)
 
     def get_max_sum(self):
         if self.time_limit < self.dim[0] + self.dim[1] - 2:
             return "Too late"
-        grid_size = self.dim[0] * self.dim[1]
         for i in range(self.time_limit):
-            if len(self.pos_checked_) < grid_size:
+            if self.pos_unchecked_:
                 map(self.append_previous_pos_,
-                    set(self.v_grid_).difference(self.pos_checked_))
-            new_values = {}
-            for new_pos, previous_pos_list in self.new_pos_from_previous_.items():
-                new_values[new_pos] = max(
-                    self.v_grid_[p] for p in previous_pos_list
+                    self.pos_unchecked_.intersection(self.v_grid_))
+            new_values = {
+                new_pos: max(
+                    map(self.v_grid_.__getitem__, previous_pos_list)
                 ) + self.candies[new_pos[0]][new_pos[1]]
+                for new_pos, previous_pos_list in
+                self.new_pos_from_previous_.items()}
             self.v_grid_.update(new_values)
         return self.v_grid_[(self.dim[0] - 1, self.dim[1] - 1)]
 
