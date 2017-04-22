@@ -27,13 +27,8 @@ class TripPlanner(object):
             # print "\n", max_sum
             for (budget, time_cnt), score_sum in max_sum.items():
                 day_cnt, past_time = divmod(time_cnt, self.hours_per_day)
-                remaining_time = self.hours_per_day - past_time
                 remaining_budget = budget - cost
-                new_time_cnt = time_cnt + visit_time
-                if visit_time > remaining_time:
-                    remaining_budget -= self.price_per_day
-                    new_time_cnt += remaining_time
-                elif past_time == 0:
+                if past_time == 0 or visit_time > self.hours_per_day - past_time:
                     remaining_budget -= self.price_per_day
 
                 if remaining_budget < 0:
