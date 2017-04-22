@@ -1,0 +1,8 @@
+400 100 7
+Eiffel-tower 25 8 15
+notre-dame 10 4 30
+the-louvre 15 2 15
+arc-de-triomphe 20 2 20
+montmartre 10 4 30
+sacre-coeur 20 4 40
+sainte-chapelle 10 8 40
