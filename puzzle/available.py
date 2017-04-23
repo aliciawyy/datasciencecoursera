@@ -5,55 +5,44 @@ def read_line_to_list(as_type=int):
     return map(as_type, raw_input().strip().split(' '))
 
 
-def transform_matrix(a):
-    return [[a[j][i] for j in range(len(a))] for i in range(len(a[0]))]
-
-
 class BAvailable(object):
     def __init__(self, n_nights, n_prices, info):
         self.n_nights = n_nights
         self.n_prices = n_prices
         self.info = info
-        self.process_info()
-        # for i, x in enumerate(self.info, 1):
-        #    print i, x
+        self.min_prices_ = [None] * self.n_nights
+        self.construct_min_prices()
 
-        self.min_price_by_night_ = {}
+    def construct_min_prices(self):
+        prices, min_stay, max_stay = self.info
 
-    def process_info(self):
-        def valid_price(p_info):
-            return p_info[0] > 0
+        for i in range(self.n_nights):
+            nights = i + 1
 
-        new_info = [None] * self.n_nights
-        for ind in range(self.n_nights):
-            new_info[ind] = filter(
-                valid_price, zip(self.info[0][ind], self.info[1][ind],
-                                 self.info[2][ind])
-            )
-        self.info = new_info
+            def get_price(p):
+                return p[0] if p[0] > 0 and p[1] <= nights <= p[2] else -1
 
-    def get_min_price(self, nights):
-        if nights not in self.min_price_by_night_:
-            def valid_price(p_info):
-                return p_info[1] <= nights <= p_info[2]
+            def reduce_price(p, q):
+                return map(
+                    lambda x: abs(x[0] * x[1]) if x[0] * x[1] < 0 else min(x),
+                    zip(p, q)
+                )
 
-            def min_price(day_info):
-                v = map(itemgetter(0), filter(valid_price, day_info))
-                return -1 if len(v) == 0 else min(v)
-
-            self.min_price_by_night_[nights] = map(min_price, self.info)
-        return self.min_price_by_night_[nights]
+            self.min_prices_[i] = reduce(reduce_price, (map(
+                get_price, zip(prices[j], min_stay[j], max_stay[j])
+            ) for j in range(self.n_prices)))
 
     def get_total_min_price(self, start, nights):
-        min_prices = self.get_min_price(nights)
-        price_in_rg = min_prices[start - 1: start + nights - 1]
-        return -1 if any(p < 0 for p in price_in_rg) else sum(price_in_rg)
+        min_prices = self.min_prices_[nights - 1][
+                     start - 1: start + nights - 1
+                     ]
+        return -1 if any(p < 0 for p in min_prices) else sum(min_prices)
 
 
 N, M, Q = read_line_to_list()
 INFO = [None] * 3
 for i0 in range(3):
-    INFO[i0] = transform_matrix([read_line_to_list() for _ in range(M)])
+    INFO[i0] = [read_line_to_list() for _ in range(M)]
 
 avail = BAvailable(N, M, INFO)
 
