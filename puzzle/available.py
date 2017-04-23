@@ -1,4 +1,3 @@
-from operator import itemgetter
 
 
 def read_line_to_list(as_type=int):
@@ -10,32 +9,32 @@ class BAvailable(object):
         self.n_nights = n_nights
         self.n_prices = n_prices
         self.info = info
-        self.min_prices_ = [None] * self.n_nights
-        self.construct_min_prices()
+        self.min_prices_ = self.construct_min_prices()
 
     def construct_min_prices(self):
         prices, min_stay, max_stay = self.info
 
-        for i in range(self.n_nights):
-            nights = i + 1
+        def get_price_wrap(k):
+            nights = k + 1
 
             def get_price(p):
-                return p[0] if p[0] > 0 and p[1] <= nights <= p[2] else -1
+                if p[0] == 0 or not p[1] <= nights <= p[2]:
+                    return p[3]
+                else:
+                    return p[0] if p[3] < 0 else min(p[0], p[3])
 
-            def reduce_price(p, q):
-                return map(
-                    lambda x: abs(x[0] * x[1]) if x[0] * x[1] < 0 else min(x),
-                    zip(p, q)
+            current_min_price = [-1] * self.n_nights
+            for j in range(self.n_prices):
+                current_min_price = map(
+                    get_price, zip(prices[j], min_stay[j], max_stay[j],
+                                   current_min_price)
                 )
+            return current_min_price
 
-            self.min_prices_[i] = reduce(reduce_price, (map(
-                get_price, zip(prices[j], min_stay[j], max_stay[j])
-            ) for j in range(self.n_prices)))
+        return map(get_price_wrap, range(self.n_nights))
 
     def get_total_min_price(self, start, nights):
-        min_prices = self.min_prices_[nights - 1][
-                     start - 1: start + nights - 1
-                     ]
+        min_prices = self.min_prices_[nights-1][start-1: start+nights-1]
         return -1 if any(p < 0 for p in min_prices) else sum(min_prices)
 
 
