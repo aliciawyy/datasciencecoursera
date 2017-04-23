@@ -9,6 +9,7 @@ class BAvailable(object):
         self.n_nights = n_nights
         self.n_prices = n_prices
         self.info = info
+
         self.min_prices_ = self.construct_min_prices()
 
     def construct_min_prices(self):
@@ -21,9 +22,9 @@ class BAvailable(object):
                 if p[0] == 0 or nights < p[1] or nights > p[2]:
                     return p[3]
                 else:
-                    return p[0] if p[3] < 0 else min(p[0], p[3])
+                    return p[0] if p[3] is None else min(p[0], p[3])
 
-            current_min_price = [-1] * self.n_nights
+            current_min_price = [None] * self.n_nights
             for j in range(self.n_prices):
                 current_min_price = map(
                     get_price, zip(prices[j], min_stay[j], max_stay[j],
@@ -34,8 +35,12 @@ class BAvailable(object):
         return map(get_price_wrap, range(self.n_nights))
 
     def get_total_min_price(self, start, nights):
-        min_prices = self.min_prices_[nights-1][start-1: start+nights-1]
-        return -1 if any(p < 0 for p in min_prices) else sum(min_prices)
+        if nights == 1:
+            min_price = self.min_prices_[0][start - 1]
+            return min_price or -1
+        ind_night = nights - 1
+        min_price = self.min_prices_[ind_night][start - 1:start + ind_night]
+        return -1 if any(p is None for p in min_price) else sum(min_price)
 
 
 N, M, Q = read_line_to_list()
