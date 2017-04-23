@@ -1,13 +1,12 @@
-# Enter your code here. Read input from STDIN. Print output to STDOUT
 from collections import defaultdict
 
 
-def readline_to_list(as_type=int):
+def read_line_to_list(as_type=int):
     return map(as_type, raw_input().strip().split(' '))
 
 
-N, M, T = readline_to_list()
-candies_ = [readline_to_list() for _ in range(N)]
+N, M, T = read_line_to_list()
+candies_ = [read_line_to_list() for _ in range(N)]
 
 
 class CollectCandies(object):

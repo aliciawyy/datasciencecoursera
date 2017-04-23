@@ -1,3 +1,8 @@
+"""
+run with python tripplanner.py < ../../data/tripplanner1.txt
+"""
+
+
 def read_line_to_list(as_type=int, start=0):
     lst = raw_input().strip().split(' ')
     if start > 0:
@@ -17,7 +22,7 @@ class TripPlanner(object):
     def max_score_sum(self):
         max_sum = {(self.budget, 0): 0}
 
-        for i, (cost, visit_time, score) in enumerate(self.attractions):
+        for cost, visit_time, score in self.attractions:
             new_max_sum = dict(max_sum)
             # print "\n", max_sum
             for (budget, time_cnt), score_sum in max_sum.items():
@@ -32,7 +37,6 @@ class TripPlanner(object):
                     new_key = (remaining_budget, new_time_cnt)
                     new_max_sum[new_key] = max(new_max_sum.get(new_key, 0),
                                                score_sum + score)
-            # print "\n", new_max_sum, '\n'*2
             max_sum.update(new_max_sum)
         return max(max_sum.values())
 

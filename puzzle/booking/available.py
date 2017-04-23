@@ -1,3 +1,6 @@
+"""
+python available.py < ../../data/available1.txt
+"""
 
 
 def read_line_to_list(as_type=int):
@@ -59,4 +62,3 @@ def print_query(_):
 map(print_query, range(Q))
 
 # print avail.min_price_by_night_
-
