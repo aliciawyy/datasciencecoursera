@@ -18,7 +18,7 @@ class BAvailable(object):
             nights = k + 1
 
             def get_price(p):
-                if p[0] == 0 or not p[1] <= nights <= p[2]:
+                if p[0] == 0 or nights < p[1] or nights > p[2]:
                     return p[3]
                 else:
                     return p[0] if p[3] < 0 else min(p[0], p[3])
@@ -48,8 +48,12 @@ avail = BAvailable(N, M, INFO)
 # print avail.get_total_min_price(6, 2)
 # print avail.min_price_by_night_
 # print avail.get_min_price(0, 1)
-for _ in range(Q):
+
+
+def print_query(_):
     print avail.get_total_min_price(*read_line_to_list())
+
+map(print_query, range(Q))
 
 # print avail.min_price_by_night_
 
