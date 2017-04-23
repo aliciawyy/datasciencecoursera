@@ -30,17 +30,17 @@ class BAvailable(object):
                     get_price, zip(prices[j], min_stay[j], max_stay[j],
                                    current_min_price)
                 )
-            return current_min_price
+            min_price_start = [
+                -1 if any(x is None for x in current_min_price[i:i+nights])
+                else sum(current_min_price[i:i+nights])
+                for i in range(self.n_nights - k)
+                ]
+            return min_price_start
 
         return map(get_price_wrap, range(self.n_nights))
 
     def get_total_min_price(self, start, nights):
-        if nights == 1:
-            min_price = self.min_prices_[0][start - 1]
-            return min_price or -1
-        ind_night = nights - 1
-        min_price = self.min_prices_[ind_night][start - 1:start + ind_night]
-        return -1 if any(p is None for p in min_price) else sum(min_price)
+        return self.min_prices_[nights - 1][start - 1]
 
 
 N, M, Q = read_line_to_list()
