@@ -13,40 +13,37 @@ class BAvailable(object):
         self.min_prices_ = self.construct_min_prices()
 
     def construct_min_prices(self):
-        prices, min_stay, max_stay = self.info
+        zipped_info = [zip(self.info[0][j], self.info[1][j], self.info[2][j])
+                       for j in range(self.n_prices)]
 
         def get_price_wrap(k):
             nights = k + 1
 
-            def get_price(p):
+            def get_price(q):
+                p, prev_price = q
                 if p[0] == 0 or nights < p[1] or nights > p[2]:
-                    return p[3]
+                    return prev_price
                 else:
-                    return p[0] if p[3] is None else min(p[0], p[3])
+                    return p[0] if prev_price is None else \
+                        min(p[0], prev_price)
 
             current_min_price = [None] * self.n_nights
-            for j in range(self.n_prices):
+            for info in zipped_info:
                 current_min_price = map(
-                    get_price, zip(prices[j], min_stay[j], max_stay[j],
-                                   current_min_price)
+                    get_price, zip(info, current_min_price)
                 )
-            min_price_start = [
-                -1 if any(x is None for x in current_min_price[i:i+nights])
+            min_price_start = [None] + [
+                -1 if None in current_min_price[i:i+nights]
                 else sum(current_min_price[i:i+nights])
                 for i in range(self.n_nights - k)
                 ]
             return min_price_start
 
-        return map(get_price_wrap, range(self.n_nights))
-
-    def get_total_min_price(self, start, nights):
-        return self.min_prices_[nights - 1][start - 1]
+        return [None] + map(get_price_wrap, range(self.n_nights))
 
 
 N, M, Q = read_line_to_list()
-INFO = [None] * 3
-for i0 in range(3):
-    INFO[i0] = [read_line_to_list() for _ in range(M)]
+INFO = [[read_line_to_list() for _ in range(M)] for i0 in range(3)]
 
 avail = BAvailable(N, M, INFO)
 
@@ -56,7 +53,8 @@ avail = BAvailable(N, M, INFO)
 
 
 def print_query(_):
-    print avail.get_total_min_price(*read_line_to_list())
+    start, nights = read_line_to_list()
+    print avail.min_prices_[nights][start]
 
 map(print_query, range(Q))
 
