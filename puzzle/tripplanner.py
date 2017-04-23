@@ -22,6 +22,7 @@ class TripPlanner(object):
         max_sum = collections.defaultdict(int)
         max_sum[(self.budget, 0)] = 0
 
+        max_sum_of_all = 0
         for visit_time, cost, score in self.attractions:
             new_max_sum = collections.defaultdict(int)
             # print "\n", max_sum
@@ -34,10 +35,12 @@ class TripPlanner(object):
                 if remaining_budget < 0:
                     continue
                 new_key = (remaining_budget, time_cnt + visit_time)
-                new_max_sum[new_key] = max(max_sum[new_key], score_sum + score,
-                                           new_max_sum[new_key])
+                this_max_sum = max(max_sum[new_key], score_sum + score,
+                                   new_max_sum[new_key])
+                new_max_sum[new_key] = this_max_sum
+                max_sum_of_all = max(max_sum_of_all, this_max_sum)
             max_sum.update(new_max_sum)
-        return max(max_sum.values())
+        return max_sum_of_all
 
 
 B, P, N = read_line_to_list()
