@@ -17,21 +17,33 @@ class TripPlanner(object):
     def max_score_sum(self):
         max_sum = {(self.budget, 0): 0}
 
-        for cost, visit_time, score in self.attractions:
+        for i, (cost, visit_time, score) in enumerate(self.attractions):
             new_max_sum = dict(max_sum)
             # print "\n", max_sum
             for (budget, time_cnt), score_sum in max_sum.items():
-                past_time = time_cnt % self.hours_per_day
                 remaining_budget = budget - cost
-                if past_time == 0 or visit_time > self.hours_per_day - past_time:
+                pass_night, new_time_cnt = self._get_new_time_cnt(time_cnt,
+                                                                  visit_time)
+                if pass_night:
                     remaining_budget -= self.price_per_day
+                    new_time_cnt %= self.hours_per_day
 
                 if remaining_budget >= 0:
-                    new_key = (remaining_budget, time_cnt + visit_time)
-                    new_max_sum[new_key] = max(new_max_sum[new_key],
+                    new_key = (remaining_budget, new_time_cnt)
+                    new_max_sum[new_key] = max(new_max_sum.get(new_key, 0),
                                                score_sum + score)
+            # print "\n", new_max_sum, '\n'*2
             max_sum.update(new_max_sum)
         return max(max_sum.values())
+
+    def _get_new_time_cnt(self, time_cnt, visit_time):
+        if time_cnt == 0:
+            return True, visit_time
+        passed_time = time_cnt + visit_time
+        if passed_time <= self.hours_per_day:
+            return False, passed_time
+        else:
+            return True, passed_time - self.hours_per_day
 
 
 B, P, N = read_line_to_list()
