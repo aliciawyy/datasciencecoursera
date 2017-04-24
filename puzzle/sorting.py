@@ -21,6 +21,18 @@ def print_insertion_sort(arr):
             print_arr(arr)
 
 
+def print_insertion_sort2(arr):
+    for i in range(1, len(arr)):
+        num_i = arr[i]
+        k = i
+        for j in range(i - 1, -1, -1):
+            if num_i < arr[j]:
+                k = j
+        if k < i:
+            arr = arr[:k] + arr[i:i + 1] + arr[k:i] + arr[i + 1:]
+        print_arr(arr)
+
+
 def get_num_shift(arr):
     cnt = 0
     for i in range(1, len(arr)):
