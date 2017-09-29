@@ -1,4 +1,5 @@
 from sklearn import model_selection
+import xgboost as xgb
 import dm_common
 
 
@@ -14,8 +15,8 @@ class Problem(dm_common.StringMixin):
             raise ValueError("Then length of data '{}' and the length"
                              " of target '{}' are not "
                              "equal.".format(data.shape[0], len(target)))
-        self._data = data
-        self._target = target
+        self.data = data
+        self.target = target
 
     @classmethod
     def from_data_frame(cls, df, target_col=None):
@@ -23,14 +24,6 @@ class Problem(dm_common.StringMixin):
             # take the last column as target by default
             target_col = df.columns[-1]
         return cls(df.drop(target_col, 1), df[target_col])
-
-    @property
-    def data(self):
-        return self._data
-
-    @property
-    def target(self):
-        return self._target
 
     @property
     def index(self):
@@ -48,6 +41,9 @@ class Problem(dm_common.StringMixin):
     def get_bootstrap_sample(self, random_state=0):
         return Problem(*get_bootstrap_sample(self.data, self.target,
                                              random_state))
+
+    def to_xgb_matrix(self):
+        return xgb.DMatrix(self.data, label=self.target)
 
     def __len__(self):
         return len(self.target)
