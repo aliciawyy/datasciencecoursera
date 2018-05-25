@@ -11,7 +11,7 @@ install:
 
 script:
   - export PYTHONPATH=$PWD/aliciawyy/dmining:$PYTHONPATH
-  - nosetests . --with-coverage --cover-package=. --cover-html --cover-erase
+  - pytest .
 
  # Coverage report
 after_success:
