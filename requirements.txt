@@ -7,4 +7,5 @@ scipy
 scikit-learn
 tweepy
 rx
+xgboost
 sheepts==0.0.3a
