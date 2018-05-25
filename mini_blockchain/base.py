@@ -1,5 +1,5 @@
 import hashlib
-from pandas import to_datetime
+from datetime import datetime
 
 import sheepts
 
@@ -12,10 +12,10 @@ def get_hash_hex(*args):
 
 
 class Block(sheepts.StringMixin):
-    def __init__(self, index, data, timestamp, previous_hash):
+    def __init__(self, index, data, previous_hash):
         self.index = index
         self.data = data
-        self.timestamp = to_datetime(timestamp)
+        self.timestamp = datetime.now()
         self.previous_hash = previous_hash
         self.hash = self._get_hash()
 
@@ -23,3 +23,8 @@ class Block(sheepts.StringMixin):
         return get_hash_hex(
             self.index, self.data, self.timestamp, self.previous_hash
         )
+
+
+class GenesisBlock(Block):
+    def __init__(self, data):
+        super(GenesisBlock, self).__init__(0, data, "0")

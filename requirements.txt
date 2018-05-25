@@ -9,3 +9,4 @@ tweepy==3.6.0
 rx==1.6.1
 xgboost==0.7.post3
 sheepts==0.0.3a
+mock==2.0.0
